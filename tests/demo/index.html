@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<title></title>
+</head>
+<body>
+	<div id="app"></div>
+<script src="https://cdn.bootcss.com/vue/2.3.3/vue.min.js"></script>
+<script src="../../dist/uploader.js"></script>
+<script type="text/javascript">
+	var Uploader = uploader.default;
+	new Vue({
+		el: '#app',
+		components: {
+			Uploader,
+		},
+		template: '<Uploader ref="uploader" :size="4" @request="onRequest" @click="onClick" @remove="onRemove"><Uploader>',
+		methods: {
+			onRequest() {
+				console.log('try to request new image');
+			},
+			onRemove(index) {
+				console.log('try to remove image in index: ', index);
+			},
+			onClick(index) {
+				console.log('try to click image in index: ', index);
+			},
+		},
+		mounted: function() {
+			this.$refs.uploader.setImages([
+				'./avatar.jpg',
+			]);
+		},
+	});
+</script>
+</body>
+</html>

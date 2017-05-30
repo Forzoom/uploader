@@ -1,13 +1,13 @@
 <template>
     <div class="ro-uploader-wrap">
         <div v-for="(image, index) in images" class="ro-uploader-image-wrap">
-            <img class="ro-uploader-image" :src="url" @click="onClickImage(index)" />
-            <i class="icon" @click="onClickRemove(index)">&#xe602;</i>
+            <div class="ro-uploader-image" :style="{'background-image': 'url(' + image + ')'}" @click="onClickImage(index)" ></div>
+            <div class="ro-uploader-remove" @click="onClickRemove(index)"></div>
         </div>
         <div
-            class="ro-uploader-image-wrap ro-uploader-add"
+            class="ro-uploader-image-wrap ro-uploader-request"
             v-show="images.length < size"
-            @click="onClickAddButton">
+            @click="onClickRequest">
         </div>
     </div>
 </template>
@@ -28,17 +28,42 @@
             };
         },
         methods: {
+            // 重置所有的images列表
+            setImages(images) {
+                const tmp = [];
+                for (let i = 0, len = images.length; i < len; i++) {
+                    tmp.push(images[i]);
+                }
+                this.images = tmp;
+                console.log(this.images);
+            },
+            add(image) {
+                this.images.push(image);
+            },
+            remove(index) {
+                this.images.splice(index, 1);
+            },
+            getImages() {
+                return this.images.slice(0);
+            },
             /**
              * 当点击图片时触发
              */
-            onClickImage() {
-
+            onClickImage(index) {
+                this.$emit('click', index);
             },
             /**
              * 当点击删除按钮时触发
              */
-            onClickRemove() {
-
+            onClickRemove(index) {
+                this.remove(index);
+                this.$emit('remove', index);
+            },
+            /**
+             * 当点击添加按钮时
+             */
+            onClickRequest() {
+                this.$emit('request');
             },
         },
     };
@@ -46,10 +71,14 @@
 
 <style lang="less">
 
+    @color-white: #ffffff;
+
     @border-color: #bbbbbb;
     @active-border-color: darken(@border-color, 20%);
     @size: 70px;
     @border-width: 1px;
+
+    @remove-button-size: 18px;
 
     .ro-uploader-wrap {
         display: flex;
@@ -61,20 +90,47 @@
                 vertical-align: middle;
                 width: @size;
                 height: @size;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
             }
-            .icon {
+            .ro-uploader-remove {
                 position: absolute;
-                width: 11px;
-                height: 11px;
-                font-size: 11px;
-                line-height: 11px;
+                width: 18px;
+                height: 18px;
+                font-size: 18px;
+                line-height: 18px;
                 color: #ffffff;
                 background-color: #aaaaaa;
                 top: 0rem;
                 right: 0rem;
+                &:before,
+                &:after {
+                    content: " ";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) rotateZ(45deg);
+                    background-color: @color-white;
+                }
+                &:before {
+                    width: @border-width + 1;
+                    height: @remove-button-size;
+                }
+                &:after {
+                    width: @remove-button-size;
+                    height: @border-width + 1;
+                }
+                &:active {
+                    border-color: @color-white;
+                    &:before,
+                    &:after {
+                        background-color: @color-white;
+                    }
+                }
             }
         }
-        .ro-uploader-add {
+        .ro-uploader-request {
             position: relative;
             width: @size;
             height: @size;
