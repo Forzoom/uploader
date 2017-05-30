@@ -4,7 +4,10 @@
   "description": "uploader component",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ./build/webpack.config.prod.js",
+    "dev": "webpack --config ./build/webpack.config.dev.js",
+    "release": "npm run build && npm run dev"
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/Forzoom/uploader/issues"
   },
-  "homepage": "https://github.com/Forzoom/uploader#readme"
+  "homepage": "https://github.com/Forzoom/uploader#readme",
+  "dependencies": {
+    "less": "^2.7.2",
+    "less-loader": "^4.0.4"
+  }
 }
