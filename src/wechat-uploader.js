@@ -70,7 +70,7 @@ export default {
                 .then((localIds) => {
                     if (localIds.length > 0) {
                         vm.$emit('load');
-                        return this.uploadWechatImages(localIds[0]).then(function() {
+                        return this.uploadWechatImages(localIds).then(function() {
                             vm.$emit('finish');
                         });
                     }
