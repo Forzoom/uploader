@@ -68,10 +68,12 @@ export default {
             const vm = this;
             return chooseImage(this.size - this.images.length)
                 .then((localIds) => {
-                    vm.$emit('load');
-                    return this.uploadWechatImages(localId).then(function() {
-                        vm.$emit('finish');
-                    });
+                    if (locals.length > 0) {
+                        vm.$emit('load');
+                        return this.uploadWechatImages(localIds[0]).then(function() {
+                            vm.$emit('finish');
+                        });
+                    }
                 })
         },
         /**
