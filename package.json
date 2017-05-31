@@ -1,6 +1,6 @@
 {
   "name": "@forzoom/uploader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "uploader component",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,24 @@
   },
   "homepage": "https://github.com/Forzoom/uploader#readme",
   "dependencies": {
+    "pressure": "^2.1.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "css-loader": "^0.28.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "style-loader": "^0.17.0",
+    "vue": "^2.3.2",
+    "vue-loader": "^12.0.3",
+    "vue-template-compiler": "^2.3.2",
+    "webpack": "^2.2.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.4"
   }

@@ -1,2 +1,6 @@
 import Uploader from './src/uploader.vue';
-export default Uploader;
+import WechatUploader from './src/wechat-uploader.js';
+export {
+	Uploader,
+	WechatUploader,
+};

@@ -37,11 +37,18 @@
                 this.images = tmp;
                 console.log(this.images);
             },
+            /**
+             * 添加新的图片
+             *
+             * @param {string} image
+             */
             add(image) {
                 this.images.push(image);
+                this.$emit('add', image);
             },
             remove(index) {
                 this.images.splice(index, 1);
+                this.$emit('remove', index);
             },
             getImages() {
                 return this.images.slice(0);
@@ -57,7 +64,6 @@
              */
             onClickRemove(index) {
                 this.remove(index);
-                this.$emit('remove', index);
             },
             /**
              * 当点击添加按钮时
@@ -96,10 +102,10 @@
             }
             .ro-uploader-remove {
                 position: absolute;
-                width: 18px;
-                height: 18px;
-                font-size: 18px;
-                line-height: 18px;
+                width: @remove-button-size;
+                height: @remove-button-size;
+                font-size: @remove-button-size;
+                line-height: @remove-button-size;
                 color: #ffffff;
                 background-color: #aaaaaa;
                 top: 0rem;
@@ -134,7 +140,7 @@
             position: relative;
             width: @size;
             height: @size;
-            border: 1px solid  #eee;
+            border: @border-width solid #aaaaaa;
             &:before,
             &:after {
                 content: " ";
@@ -160,5 +166,5 @@
                 }
             }
         }   
-    }   
+    }
 </style>
