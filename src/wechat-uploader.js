@@ -66,11 +66,11 @@ export default {
          */
         onClickRequest() {
             const vm = this;
-            return chooseImage(this.size - this.images.length)
+            return chooseImage(vm.size - vm.images.length)
                 .then((localIds) => {
                     if (localIds.length > 0) {
                         vm.$emit('load');
-                        return this.uploadWechatImages(localIds).then(function() {
+                        return vm.uploadWechatImages(localIds).then(function() {
                             vm.$emit('finish');
                         });
                     }
@@ -80,13 +80,13 @@ export default {
          * 上传多张图片，需要保证一张上传完成之后，再上传另外一张
          */
         uploadWechatImages(localIds) {
-            const vm = this;
+            const vm = vm;
             const localId = localIds.unshift();
             uploadWechatImage(localId)
             .then(function({ image, serverId, }) {
                 vm.add(image, serverId);
                 if (localIds.length > 0) {
-                    return this.uploadWechatImages(localIds);
+                    return vm.uploadWechatImages(localIds);
                 }
             });
         },

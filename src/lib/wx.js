@@ -1,7 +1,7 @@
 const isIOS = /iPhone/.test(navigator.userAgent);
 
 /**
- * @return {Promise} localId
+ * @return {Promise} localIds: Array<string>
  */
 export function chooseImage(count) {
     return new Promise(function(resolve, reject) {
