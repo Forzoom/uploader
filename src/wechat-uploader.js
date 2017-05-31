@@ -69,7 +69,7 @@ export default {
             return chooseImage(this.size - this.images.length)
                 .then((localIds) => {
                     vm.$emit('load');
-                    return uploadWechatImages(localId).then(function() {
+                    return this.uploadWechatImages(localId).then(function() {
                         vm.$emit('finish');
                     });
                 })
@@ -80,7 +80,7 @@ export default {
         uploadWechatImages(localIds) {
             const vm = this;
             const localId = localIds.unshift();
-            this.uploadWechatImage(localId)
+            uploadWechatImage(localId)
             .then(function({ image, serverId, }) {
                 vm.add(image, serverId);
                 if (localIds.length > 0) {
