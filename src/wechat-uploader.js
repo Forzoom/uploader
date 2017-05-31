@@ -81,7 +81,7 @@ export default {
          */
         uploadWechatImages(localIds) {
             const vm = this;
-            const localId = localIds.unshift();
+            const localId = localIds.shift();
             uploadWechatImage(localId)
             .then(function({ image, serverId, }) {
                 vm.add(image, serverId);
