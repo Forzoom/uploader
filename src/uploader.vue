@@ -102,10 +102,10 @@
             }
             .ro-uploader-remove {
                 position: absolute;
-                width: 18px;
-                height: 18px;
-                font-size: 18px;
-                line-height: 18px;
+                width: @remove-button-size;
+                height: @remove-button-size;
+                font-size: @remove-button-size;
+                line-height: @remove-button-size;
                 color: #ffffff;
                 background-color: #aaaaaa;
                 top: 0rem;
@@ -140,7 +140,7 @@
             position: relative;
             width: @size;
             height: @size;
-            border: 1px solid  #eee;
+            border: @border-width solid #aaaaaa;
             &:before,
             &:after {
                 content: " ";
@@ -166,5 +166,5 @@
                 }
             }
         }   
-    }   
+    }
 </style>
