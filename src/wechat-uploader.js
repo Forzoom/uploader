@@ -46,6 +46,10 @@ export default {
         add(image, serverId) {
             this.images.push(image);
             this.serverIds.push(serverId);
+            this.$emit('add', {
+                image,
+                serverId,
+            });
         },
         /**
          * 删除图片
@@ -55,6 +59,7 @@ export default {
         remove(index) {
             this.images.splice(index, 1);
             this.serverIds.splice(index, 1);
+            this.$emit('remove', index);
         },
         /**
          * 要求添加新的图片

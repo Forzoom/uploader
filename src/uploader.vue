@@ -44,9 +44,11 @@
              */
             add(image) {
                 this.images.push(image);
+                this.$emit('add', image);
             },
             remove(index) {
                 this.images.splice(index, 1);
+                this.$emit('remove', index);
             },
             getImages() {
                 return this.images.slice(0);
@@ -62,7 +64,6 @@
              */
             onClickRemove(index) {
                 this.remove(index);
-                this.$emit('remove', index);
             },
             /**
              * 当点击添加按钮时

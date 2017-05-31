@@ -6,6 +6,7 @@
 1. add(image)需要判断当前的size是否已满
 1. 添加直接上传的功能，目前兼容微信jssdk图片上传
 1. 提供load/finish/success事件
+1. 添加add(image)事件
 
 ### Changelog
 
