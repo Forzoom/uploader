@@ -44,12 +44,16 @@ export default {
          * @param {} serverId 
          */
         add(image, serverId) {
-            this.images.push(image);
-            this.serverIds.push(serverId);
-            this.$emit('add', {
-                image,
-                serverId,
-            });
+            if (this.images.length < this.size) {
+                this.images.push(image);
+                this.serverIds.push(serverId);
+                this.$emit('add', {
+                    image,
+                    serverId,
+                });
+                return true;
+            }
+            return false;
         },
         /**
          * 删除图片
@@ -57,9 +61,13 @@ export default {
          * @param {} index
          */
         remove(index) {
-            this.images.splice(index, 1);
-            this.serverIds.splice(index, 1);
-            this.$emit('remove', index);
+            if (0 <= index && index < this.size) {
+                this.images.splice(index, 1);
+                this.serverIds.splice(index, 1);
+                this.$emit('remove', index);
+                return true;
+            }
+            return false;
         },
         /**
          * 要求添加新的图片

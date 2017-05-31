@@ -157,12 +157,16 @@ exports.default = {
          * @param {} serverId 
          */
         add: function add(image, serverId) {
-            this.images.push(image);
-            this.serverIds.push(serverId);
-            this.$emit('add', {
-                image: image,
-                serverId: serverId
-            });
+            if (this.images.length < this.size) {
+                this.images.push(image);
+                this.serverIds.push(serverId);
+                this.$emit('add', {
+                    image: image,
+                    serverId: serverId
+                });
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -171,9 +175,13 @@ exports.default = {
          * @param {} index
          */
         remove: function remove(index) {
-            this.images.splice(index, 1);
-            this.serverIds.splice(index, 1);
-            this.$emit('remove', index);
+            if (0 <= index && index < this.size) {
+                this.images.splice(index, 1);
+                this.serverIds.splice(index, 1);
+                this.$emit('remove', index);
+                return true;
+            }
+            return false;
         },
 
         /**
