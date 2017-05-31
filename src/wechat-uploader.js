@@ -80,7 +80,7 @@ export default {
          * 上传多张图片，需要保证一张上传完成之后，再上传另外一张
          */
         uploadWechatImages(localIds) {
-            const vm = vm;
+            const vm = this;
             const localId = localIds.unshift();
             uploadWechatImage(localId)
             .then(function({ image, serverId, }) {
