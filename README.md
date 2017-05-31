@@ -1,9 +1,6 @@
 ### Roadmap
 
-1. 使用before和after生成的icon代码量优化
 1. image之间添加间距
-1. remove(index)需要对index进行处理，例如是否大于0
-1. add(image)需要判断当前的size是否已满
 1. 提供success事件
 
 ### Changelog
@@ -11,6 +8,10 @@
 #### v0.0.2
 
 1. export default Uploader 改为 export {Uploader, WechatUploader}
+
+#### v0.0.3
+
+1. add/remove添加boolean返回值
 
 ### Version
 
@@ -33,3 +34,9 @@
 1. remove(index)函数调用将触发@remove(index)事件
 1. 添加wechat-uploader.js
 1. 图片上传将触发@load和@finish事件
+
+#### v0.0.3
+
+1. 样式代码简单优化
+1. remove(index)需要对index进行处理，例如是否大于0。添加返回值
+1. add(image)需要判断当前的size是否已满。添加返回值

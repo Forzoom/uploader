@@ -1,8 +1,8 @@
 {
   "name": "@forzoom/uploader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "uploader component",
-  "main": "index.js",
+  "main": "dist/uploader.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./build/webpack.config.prod.js",

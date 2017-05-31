@@ -157,12 +157,16 @@ exports.default = {
          * @param {} serverId 
          */
         add: function add(image, serverId) {
-            this.images.push(image);
-            this.serverIds.push(serverId);
-            this.$emit('add', {
-                image: image,
-                serverId: serverId
-            });
+            if (this.images.length < this.size) {
+                this.images.push(image);
+                this.serverIds.push(serverId);
+                this.$emit('add', {
+                    image: image,
+                    serverId: serverId
+                });
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -171,9 +175,13 @@ exports.default = {
          * @param {} index
          */
         remove: function remove(index) {
-            this.images.splice(index, 1);
-            this.serverIds.splice(index, 1);
-            this.$emit('remove', index);
+            if (0 <= index && index < this.size) {
+                this.images.splice(index, 1);
+                this.serverIds.splice(index, 1);
+                this.$emit('remove', index);
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -267,12 +275,20 @@ exports.default = {
          * @param {string} image
          */
         add: function add(image) {
-            this.images.push(image);
-            this.$emit('add', image);
+            if (this.images.length < this.size) {
+                this.images.push(image);
+                this.$emit('add', image);
+                return true;
+            }
+            return false;
         },
         remove: function remove(index) {
-            this.images.splice(index, 1);
-            this.$emit('remove', index);
+            if (0 <= index && index < this.size) {
+                this.images.splice(index, 1);
+                this.$emit('remove', index);
+                return true;
+            }
+            return false;
         },
         getImages: function getImages() {
             return this.images.slice(0);
@@ -377,7 +393,7 @@ exports = module.exports = __webpack_require__(5)(undefined);
 
 
 // module
-exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);background-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #aaa}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}", ""]);
+exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{background-color:#fff;transform:translate(-50%,-50%) rotate(45deg)}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #aaa}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}.ro-uploader-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-remove:before,.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}", ""]);
 
 // exports
 

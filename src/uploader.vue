@@ -43,12 +43,20 @@
              * @param {string} image
              */
             add(image) {
-                this.images.push(image);
-                this.$emit('add', image);
+                if (this.images.length < this.size) {
+                    this.images.push(image);
+                    this.$emit('add', image);
+                    return true;
+                }
+                return false;
             },
             remove(index) {
-                this.images.splice(index, 1);
-                this.$emit('remove', index);
+                if (0 <= index && index < this.size) {
+                    this.images.splice(index, 1);
+                    this.$emit('remove', index);
+                    return true;
+                }
+                return false;
             },
             getImages() {
                 return this.images.slice(0);
@@ -112,12 +120,8 @@
                 right: 0rem;
                 &:before,
                 &:after {
-                    content: " ";
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%) rotateZ(45deg);
                     background-color: @color-white;
+                    transform: translate(-50%, -50%) rotateZ(45deg);
                 }
                 &:before {
                     width: @border-width + 1;
@@ -143,11 +147,6 @@
             border: @border-width solid #aaaaaa;
             &:before,
             &:after {
-                content: " ";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
                 background-color: @border-color;
             }
             &:before {
@@ -165,6 +164,17 @@
                     background-color: @active-border-color;
                 }
             }
-        }   
+        }
+        .ro-uploader-remove,
+        .ro-uploader-request {
+            &:before,
+            &:after {
+                content: " ";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
     }
 </style>
