@@ -4,6 +4,8 @@
 1. image之间添加间距
 1. remove(index)需要对index进行处理，例如是否大于0
 1. add(image)需要判断当前的size是否已满
+1. 添加直接上传的功能，目前兼容微信jssdk图片上传
+1. 提供load/finish/success事件
 
 ### Changelog
 

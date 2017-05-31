@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Forzoom/uploader#readme",
   "dependencies": {
     "less": "^2.7.2",
-    "less-loader": "^4.0.4"
+    "less-loader": "^4.0.4",
+    "pressure": "^2.1.1"
   }
 }

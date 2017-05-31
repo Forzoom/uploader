@@ -37,6 +37,11 @@
                 this.images = tmp;
                 console.log(this.images);
             },
+            /**
+             * 添加新的图片
+             *
+             * @param {string} image
+             */
             add(image) {
                 this.images.push(image);
             },
