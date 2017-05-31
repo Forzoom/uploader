@@ -242,6 +242,10 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
 
 exports.default = {
     name: 'ROUploader',
@@ -266,7 +270,6 @@ exports.default = {
                 tmp.push(images[i]);
             }
             this.images = tmp;
-            console.log(this.images);
         },
 
         /**
@@ -313,6 +316,17 @@ exports.default = {
          */
         onClickRequest: function onClickRequest() {
             this.$emit('request');
+        },
+
+        /**
+         * 当点击
+         */
+        onPress: function onPress(index) {
+            var _this = this;
+
+            return function () {
+                _this.$emit('menu', index);
+            };
         }
     }
 };
@@ -586,8 +600,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ro-uploader-wrap"
   }, [_vm._l((_vm.images), function(image, index) {
     return _c('div', {
-      staticClass: "ro-uploader-image-wrap"
+      directives: [{
+        name: "pressure-press",
+        rawName: "v-pressure-press",
+        value: (_vm.onPress),
+        expression: "onPress"
+      }],
+      staticClass: "ro-uploader-image-wrap",
+      attrs: {
+        "data-test": "true"
+      }
     }, [_c('div', {
+      directives: [{
+        name: "pressure-press",
+        rawName: "v-pressure-press",
+        value: (_vm.onPress(index)),
+        expression: "onPress(index)"
+      }],
       staticClass: "ro-uploader-image",
       style: ({
         'background-image': 'url(' + image + ')'
