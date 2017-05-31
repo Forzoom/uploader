@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,13 +81,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 function injectStyle (ssrContext) {
-  __webpack_require__(6)
+  __webpack_require__(8)
 }
-var Component = __webpack_require__(4)(
+var Component = __webpack_require__(6)(
   /* script */
-  __webpack_require__(1),
+  __webpack_require__(2),
   /* template */
-  __webpack_require__(5),
+  __webpack_require__(7),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -101,6 +101,117 @@ module.exports = Component.exports
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _wx = __webpack_require__(3);
+
+var _uploader = __webpack_require__(0);
+
+var _uploader2 = _interopRequireDefault(_uploader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ *
+ *
+ * @return {Promise} {image, serverId}
+ */
+function uploadWechatImage(localId) {
+    var serverId = null;
+    return (0, _wx.uploadImage)(localId).then(function (_serverId) {
+        serverId = _serverId; // 记录serverId
+        return localId;
+    }).then(_wx.getLocalImgData) // 权限检测可能不应该这样使用
+    .then(function (imageData) {
+        return {
+            image: imageData,
+            serverId: serverId
+        };
+    });
+}
+
+/**
+ * 
+ */
+exports.default = {
+    name: 'WechatUploader',
+    extends: _uploader2.default,
+    data: function data() {
+        return {
+            serverIds: []
+        };
+    },
+
+    methods: {
+        /**
+         * 添加图片
+         *
+         * @param {} image 图片内容
+         * @param {} serverId 
+         */
+        add: function add(image, serverId) {
+            this.images.push(image);
+            this.serverIds.push(serverId);
+            this.$emit('add', {
+                image: image,
+                serverId: serverId
+            });
+        },
+
+        /**
+         * 删除图片
+         *
+         * @param {} index
+         */
+        remove: function remove(index) {
+            this.images.splice(index, 1);
+            this.serverIds.splice(index, 1);
+            this.$emit('remove', index);
+        },
+
+        /**
+         * 要求添加新的图片
+         */
+        onClickRequest: function onClickRequest() {
+            var vm = this;
+            return (0, _wx.chooseImage)(vm.size - vm.images.length).then(function (localIds) {
+                if (localIds.length > 0) {
+                    vm.$emit('load');
+                    return vm.uploadWechatImages(localIds).then(function () {
+                        vm.$emit('finish');
+                    });
+                }
+            });
+        },
+
+        /**
+         * 上传多张图片，需要保证一张上传完成之后，再上传另外一张
+         */
+        uploadWechatImages: function uploadWechatImages(localIds) {
+            var vm = this;
+            var localId = localIds.shift();
+            uploadWechatImage(localId).then(function (_ref) {
+                var image = _ref.image,
+                    serverId = _ref.serverId;
+
+                vm.add(image, serverId);
+                if (localIds.length > 0) {
+                    return vm.uploadWechatImages(localIds);
+                }
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -149,11 +260,19 @@ exports.default = {
             this.images = tmp;
             console.log(this.images);
         },
+
+        /**
+         * 添加新的图片
+         *
+         * @param {string} image
+         */
         add: function add(image) {
             this.images.push(image);
+            this.$emit('add', image);
         },
         remove: function remove(index) {
             this.images.splice(index, 1);
+            this.$emit('remove', index);
         },
         getImages: function getImages() {
             return this.images.slice(0);
@@ -171,7 +290,6 @@ exports.default = {
          */
         onClickRemove: function onClickRemove(index) {
             this.remove(index);
-            this.$emit('remove', index);
         },
 
         /**
@@ -184,21 +302,88 @@ exports.default = {
 };
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(undefined);
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.chooseImage = chooseImage;
+exports.uploadImage = uploadImage;
+exports.getLocalImgData = getLocalImgData;
+var isIOS = /iPhone/.test(navigator.userAgent);
+
+/**
+ * @return {Promise} localIds: Array<string>
+ */
+function chooseImage(count) {
+    return new Promise(function (resolve, reject) {
+        wx.chooseImage({
+            count: count,
+            sizeType: ['compressed'],
+            success: function success(res) {
+                return resolve(res.localIds);
+            }
+        });
+    });
+}
+
+/**
+ * 默认不显示progress
+ * @param localId
+ *
+ * @return {Promise} serverId
+ */
+function uploadImage(localId) {
+    return new Promise(function (resolve, reject) {
+        wx.uploadImage({
+            localId: localId,
+            isShowProgressTips: 0,
+            success: function success(res) {
+                return resolve(res.serverId);
+            }
+        });
+    });
+}
+
+/**
+ * @param localId
+ *
+ * @return {Promise} imageData
+ */
+function getLocalImgData(localId) {
+    if (!isIOS || !window.__wxjs_is_wkwebview) {
+        return localId;
+    }
+    return new Promise(function (resolve, reject) {
+        wx.getLocalImgData({
+            localId: localId,
+            success: function success(res) {
+                return resolve(res.localData);
+            }
+        });
+    });
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);background-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #eee}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}", ""]);
+exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);background-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #aaa}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}", ""]);
 
 // exports
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -280,7 +465,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -377,7 +562,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -419,20 +604,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },staticRenderFns: []}
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(2);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(7)("43e9bb8d", content, true);
+var update = __webpack_require__(9)("43e9bb8d", content, true);
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -451,7 +636,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(8)
+var listToStyles = __webpack_require__(10)
 
 /*
 type StyleObject = {
@@ -653,7 +838,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -686,15 +871,20 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_uploader_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_uploader_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__src_uploader_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js__);
+/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "Uploader", function() { return __WEBPACK_IMPORTED_MODULE_0__src_uploader_vue___default.a; });
+/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "WechatUploader", function() { return __WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js___default.a; });
 
-/* harmony default export */ __webpack_exports__["default"] = (__WEBPACK_IMPORTED_MODULE_0__src_uploader_vue___default.a);
+
+
 
 /***/ })
 /******/ ]);
