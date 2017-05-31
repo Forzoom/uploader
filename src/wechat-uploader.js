@@ -80,7 +80,7 @@ export default {
         uploadWechatImages(localIds) {
             const vm = this;
             const localId = localIds.unshift();
-            uploadWechatImage(localId)
+            this.uploadWechatImage(localId)
             .then(function({ image, serverId, }) {
                 vm.add(image, serverId);
                 if (localIds.length > 0) {
