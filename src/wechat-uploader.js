@@ -1,4 +1,5 @@
 import {
+    previewImage,
     chooseImage,
     uploadImage,
     getLocalImgData,
@@ -125,5 +126,10 @@ export default {
                 }
             });
         },
+    },
+    mounted() {
+        this.$on('click', function(image) {
+            previewImage(image, this.images);
+        });
     },
 };
