@@ -1,7 +1,11 @@
 <template>
     <div class="ro-uploader-wrap">
-        <div v-for="(image, index) in images" class="ro-uploader-image-wrap">
-            <div class="ro-uploader-image" :style="{'background-image': 'url(' + image + ')'}" @click="onClickImage(index)" ></div>
+        <div v-for="(image, index) in images" class="ro-uploader-image-wrap" v-pressure-press="onPress" data-test="true">
+            <div
+                class="ro-uploader-image"
+                :style="{'background-image': 'url(' + image + ')'}"
+                @click="onClickImage(index)"
+                v-pressure-press="onPress(index)"></div>
             <div class="ro-uploader-remove" @click="onClickRemove(index)"></div>
         </div>
         <div
@@ -35,7 +39,6 @@
                     tmp.push(images[i]);
                 }
                 this.images = tmp;
-                console.log(this.images);
             },
             /**
              * 添加新的图片
@@ -78,6 +81,14 @@
              */
             onClickRequest() {
                 this.$emit('request');
+            },
+            /**
+             * 当点击
+             */
+            onPress(index) {
+                return () => {
+                    this.$emit('menu', index);
+                }
             },
         },
     };

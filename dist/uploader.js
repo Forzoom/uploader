@@ -145,11 +145,24 @@ exports.default = {
     extends: _uploader2.default,
     data: function data() {
         return {
+            /**
+             * 保存所有的serverId
+             */
             serverIds: []
         };
     },
 
     methods: {
+        /**
+         * @param {Array<{image, serverId}>} data
+         */
+        setImages: function setImages(data) {
+            for (var i = 0, len = data.length; i < len; i++) {
+                this.images.push(data[i].image);
+                this.serverIds.push(data[i].serverId);
+            }
+        },
+
         /**
          * 添加图片
          *
@@ -167,6 +180,22 @@ exports.default = {
                 return true;
             }
             return false;
+        },
+
+        /**
+         * 获得所有的图片内容
+         *
+         * @return {Array<{image, serverId}>} 
+         */
+        getImages: function getImages() {
+            var result = [];
+            for (var i = 0, len = this.images.length; i < len; i++) {
+                result.push({
+                    image: this.images[i],
+                    serverId: this.serverIds[i]
+                });
+            }
+            return result;
         },
 
         /**
@@ -242,6 +271,10 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
 
 exports.default = {
     name: 'ROUploader',
@@ -266,7 +299,6 @@ exports.default = {
                 tmp.push(images[i]);
             }
             this.images = tmp;
-            console.log(this.images);
         },
 
         /**
@@ -313,6 +345,17 @@ exports.default = {
          */
         onClickRequest: function onClickRequest() {
             this.$emit('request');
+        },
+
+        /**
+         * 当点击
+         */
+        onPress: function onPress(index) {
+            var _this = this;
+
+            return function () {
+                _this.$emit('menu', index);
+            };
         }
     }
 };
@@ -586,8 +629,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ro-uploader-wrap"
   }, [_vm._l((_vm.images), function(image, index) {
     return _c('div', {
-      staticClass: "ro-uploader-image-wrap"
+      directives: [{
+        name: "pressure-press",
+        rawName: "v-pressure-press",
+        value: (_vm.onPress),
+        expression: "onPress"
+      }],
+      staticClass: "ro-uploader-image-wrap",
+      attrs: {
+        "data-test": "true"
+      }
     }, [_c('div', {
+      directives: [{
+        name: "pressure-press",
+        rawName: "v-pressure-press",
+        value: (_vm.onPress(index)),
+        expression: "onPress(index)"
+      }],
       staticClass: "ro-uploader-image",
       style: ({
         'background-image': 'url(' + image + ')'

@@ -33,10 +33,22 @@ export default {
     extends: Uploader,
     data() {
         return {
+            /**
+             * 保存所有的serverId
+             */
             serverIds: [],
         };
     },
     methods: {
+        /**
+         * @param {Array<{image, serverId}>} data
+         */
+        setImages(data) {
+            for (let i = 0, len = data.length; i < len; i++) {
+                this.images.push(data[i].image);
+                this.serverIds.push(data[i].serverId);
+            }
+        },
         /**
          * 添加图片
          *
@@ -54,6 +66,21 @@ export default {
                 return true;
             }
             return false;
+        },
+        /**
+         * 获得所有的图片内容
+         *
+         * @return {Array<{image, serverId}>} 
+         */
+        getImages() {
+            const result = [];
+            for (let i = 0, len = this.images.length; i < len; i++) {
+                result.push({
+                    image: this.images[i],
+                    serverId: this.serverIds[i],
+                });
+            }
+            return result;
         },
         /**
          * 删除图片

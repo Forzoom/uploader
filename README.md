@@ -13,6 +13,11 @@
 
 1. add/remove添加boolean返回值
 
+#### v0.0.4
+
+1. WechatUploader中setImages(images: Array<image>)函数修改为setImages(data: Array<{image, serverId}>)
+2. WechatUploader中getImages: Array<image>函数修改为getImages: Array<{image, serverId}>
+
 ### Version
 
 #### v0.0.1
@@ -40,3 +45,7 @@
 1. 样式代码简单优化
 1. remove(index)需要对index进行处理，例如是否大于0。添加返回值
 1. add(image)需要判断当前的size是否已满。添加返回值
+
+#### v0.0.4
+
+1. 修复WechatUploader中setImages/getImages的参数可能导致的不正确问题
