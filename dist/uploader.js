@@ -145,11 +145,24 @@ exports.default = {
     extends: _uploader2.default,
     data: function data() {
         return {
+            /**
+             * 保存所有的serverId
+             */
             serverIds: []
         };
     },
 
     methods: {
+        /**
+         * @param {Array<{image, serverId}>} data
+         */
+        setImages: function setImages(data) {
+            for (var i = 0, len = data.length; i < len; i++) {
+                this.images.push(data[i].image);
+                this.serverIds.push(data[i].serverId);
+            }
+        },
+
         /**
          * 添加图片
          *
@@ -167,6 +180,22 @@ exports.default = {
                 return true;
             }
             return false;
+        },
+
+        /**
+         * 获得所有的图片内容
+         *
+         * @return {Array<{image, serverId}>} 
+         */
+        getImages: function getImages() {
+            var result = [];
+            for (var i = 0, len = this.images.length; i < len; i++) {
+                result.push({
+                    image: this.images[i],
+                    serverId: this.serverIds[i]
+                });
+            }
+            return result;
         },
 
         /**
