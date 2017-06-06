@@ -6,11 +6,11 @@
                 :style="{'background-image': 'url(' + image + ')'}"
                 @click="onClickImage(index)"
                 v-pressure-press="onPress(index)"></div>
-            <div class="ro-uploader-remove" @click="onClickRemove(index)"></div>
+            <div v-if="canModify" class="ro-uploader-remove" @click="onClickRemove(index)"></div>
         </div>
         <div
             class="ro-uploader-image-wrap ro-uploader-request"
-            v-show="images.length < size"
+            v-if="images.length < size && canModify"
             @click="onClickRequest">
         </div>
     </div>
@@ -20,9 +20,16 @@
     export default {
         name: 'ROUploader',
         props: {
+            /**
+             * 允许上传图片个数
+             */
             size: {
                 type: Number,
                 default: 1,
+            },
+            canModify: {
+                type: Boolean,
+                default: true,
             },
         },
         data() {
@@ -41,7 +48,7 @@
                 this.images = tmp;
             },
             /**
-             * 添加新的图片
+             * 添加图片
              *
              * @param {string} image
              */
@@ -53,6 +60,11 @@
                 }
                 return false;
             },
+            /**
+             * 删除图片
+             *
+             * @param {number} index
+             */
             remove(index) {
                 if (0 <= index && index < this.size) {
                     this.images.splice(index, 1);
@@ -61,11 +73,18 @@
                 }
                 return false;
             },
+            /**
+             * 获得所有图片
+             *
+             * @return {Array<string>}
+             */
             getImages() {
                 return this.images.slice(0);
             },
             /**
              * 当点击图片时触发
+             *
+             * @param {number} index
              */
             onClickImage(index) {
                 this.$emit('click', index);

@@ -53,3 +53,4 @@
 #### v0.0.5
 
 1. WechatUploader提供preview
+1. 添加canModify控制部分按钮的显示
