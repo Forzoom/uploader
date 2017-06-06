@@ -49,3 +49,8 @@
 #### v0.0.4
 
 1. 修复WechatUploader中setImages/getImages的参数可能导致的不正确问题
+
+#### v0.0.5
+
+1. WechatUploader提供preview
+1. 添加canModify控制部分按钮的显示

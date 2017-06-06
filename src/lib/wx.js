@@ -1,5 +1,12 @@
 const isIOS = /iPhone/.test(navigator.userAgent);
 
+export function previewImage(image, images) {
+    wx.previewImage({
+        current: image,
+        urls: images,
+    });
+}
+
 /**
  * @return {Promise} localIds: Array<string>
  */

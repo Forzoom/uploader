@@ -244,6 +244,11 @@ exports.default = {
                 }
             });
         }
+    },
+    mounted: function mounted() {
+        this.$on('click', function (image) {
+            (0, _wx.previewImage)(image, this.images);
+        });
     }
 };
 
@@ -370,10 +375,18 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.previewImage = previewImage;
 exports.chooseImage = chooseImage;
 exports.uploadImage = uploadImage;
 exports.getLocalImgData = getLocalImgData;
 var isIOS = /iPhone/.test(navigator.userAgent);
+
+function previewImage(image, images) {
+    wx.previewImage({
+        current: image,
+        urls: images
+    });
+}
 
 /**
  * @return {Promise} localIds: Array<string>
