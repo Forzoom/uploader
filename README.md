@@ -2,6 +2,7 @@
 
 1. image之间添加间距
 1. 提供success事件
+1. 放弃单文件组件，使用render函数，那么样式库应该如何引入呢?
 
 ### Changelog
 
@@ -54,3 +55,7 @@
 
 1. WechatUploader提供preview
 1. 添加canModify控制部分按钮的显示
+
+#### v0.0.6
+
+1. 修复WechatUploader的setImages逻辑错误
