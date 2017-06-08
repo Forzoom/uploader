@@ -45,10 +45,14 @@ export default {
          * @param {Array<{image, serverId}>} data
          */
         setImages(data) {
+            const images = [];
+            const serverIds = [];
             for (let i = 0, len = data.length; i < len; i++) {
-                this.images.push(data[i].image);
-                this.serverIds.push(data[i].serverId);
+                images.push(data[i].image);
+                serverIds.push(data[i].serverId);
             }
+            this.images = images;
+            this.serverIds = serverIds;
         },
         /**
          * 添加图片
