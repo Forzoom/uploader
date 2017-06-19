@@ -1,6 +1,10 @@
 <template>
-    <div class="ro-uploader-wrap">
-        <div v-for="(image, index) in images" class="ro-uploader-image-wrap" v-pressure-press="onPress" data-test="true">
+    <div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">
+        <div
+            v-for="(image, index) in images"
+            class="ro-uploader-image-wrap"
+            v-pressure-press="onPress"
+            data-test="true">
             <div
                 class="ro-uploader-image"
                 :style="{'background-image': 'url(' + image + ')'}"
@@ -11,13 +15,21 @@
         <div
             class="ro-uploader-image-wrap ro-uploader-request"
             v-if="images.length < size && canModify"
-            @click="onClickRequest">
+            @click="onClickRequest"
+            :class="requestClass"
+            :style="requestStyle">
         </div>
     </div>
 </template>
 
 <script>
     export default {
+        render(h) {
+            const items = [];
+            for (let i = 0, len = images.length; i < len; i++) {
+                
+            }
+        },
         name: 'ROUploader',
         props: {
             /**
@@ -27,9 +39,42 @@
                 type: Number,
                 default: 1,
             },
+            /**
+             * 是否允许修改
+             */
             canModify: {
                 type: Boolean,
                 default: true,
+            },
+            containerClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 容器样式
+             */
+            containerStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            requestClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 请求对象的样式
+             */
+            requestStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
             },
         },
         data() {
@@ -109,6 +154,9 @@
                     this.$emit('menu', index);
                 }
             },
+        },
+        render() {
+
         },
     };
 </script>

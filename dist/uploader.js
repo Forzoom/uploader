@@ -157,10 +157,14 @@ exports.default = {
          * @param {Array<{image, serverId}>} data
          */
         setImages: function setImages(data) {
+            var images = [];
+            var serverIds = [];
             for (var i = 0, len = data.length; i < len; i++) {
-                this.images.push(data[i].image);
-                this.serverIds.push(data[i].serverId);
+                images.push(data[i].image);
+                serverIds.push(data[i].serverId);
             }
+            this.images = images;
+            this.serverIds = serverIds;
         },
 
         /**
@@ -262,6 +266,15 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -281,12 +294,57 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 
-exports.default = {
+exports.default = _defineProperty({
+    render: function render(h) {
+        var items = [];
+        for (var i = 0, len = images.length; i < len; i++) {}
+    },
+
     name: 'ROUploader',
     props: {
+        /**
+         * 允许上传图片个数
+         */
         size: {
             type: Number,
             default: 1
+        },
+        /**
+         * 是否允许修改
+         */
+        canModify: {
+            type: Boolean,
+            default: true
+        },
+        containerClass: {
+            type: [Object, Array],
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * 容器样式
+         */
+        containerStyle: {
+            type: Object,
+            default: function _default() {
+                return {};
+            }
+        },
+        requestClass: {
+            type: [Object, Array],
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * 请求对象的样式
+         */
+        requestStyle: {
+            type: Object,
+            default: function _default() {
+                return {};
+            }
         }
     },
     data: function data() {
@@ -307,7 +365,7 @@ exports.default = {
         },
 
         /**
-         * 添加新的图片
+         * 添加图片
          *
          * @param {string} image
          */
@@ -319,6 +377,12 @@ exports.default = {
             }
             return false;
         },
+
+        /**
+         * 删除图片
+         *
+         * @param {number} index
+         */
         remove: function remove(index) {
             if (0 <= index && index < this.size) {
                 this.images.splice(index, 1);
@@ -327,12 +391,20 @@ exports.default = {
             }
             return false;
         },
+
+        /**
+         * 获得所有图片
+         *
+         * @return {Array<string>}
+         */
         getImages: function getImages() {
             return this.images.slice(0);
         },
 
         /**
          * 当点击图片时触发
+         *
+         * @param {number} index
          */
         onClickImage: function onClickImage(index) {
             this.$emit('click', index);
@@ -363,7 +435,7 @@ exports.default = {
             };
         }
     }
-};
+}, 'render', function render() {});
 
 /***/ }),
 /* 3 */
@@ -639,7 +711,9 @@ module.exports = function normalizeComponent (
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "ro-uploader-wrap"
+    staticClass: "ro-uploader-wrap",
+    class: _vm.containerClass,
+    style: (_vm.containerStyle)
   }, [_vm._l((_vm.images), function(image, index) {
     return _c('div', {
       directives: [{
@@ -668,26 +742,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.onClickImage(index)
         }
       }
-    }), _vm._v(" "), _c('div', {
+    }), _vm._v(" "), (_vm.canModify) ? _c('div', {
       staticClass: "ro-uploader-remove",
       on: {
         "click": function($event) {
           _vm.onClickRemove(index)
         }
       }
-    })])
-  }), _vm._v(" "), _c('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.images.length < _vm.size),
-      expression: "images.length < size"
-    }],
+    }) : _vm._e()])
+  }), _vm._v(" "), (_vm.images.length < _vm.size && _vm.canModify) ? _c('div', {
     staticClass: "ro-uploader-image-wrap ro-uploader-request",
+    class: _vm.requestClass,
+    style: (_vm.requestStyle),
     on: {
       "click": _vm.onClickRequest
     }
-  })], 2)
+  }) : _vm._e()], 2)
 },staticRenderFns: []}
 
 /***/ }),
@@ -701,7 +771,7 @@ var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("43e9bb8d", content, true);
+var update = __webpack_require__(9)("5a82b071", content, true);
 
 /***/ }),
 /* 9 */
