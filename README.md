@@ -59,3 +59,7 @@
 #### v0.0.6
 
 1. 修复WechatUploader的setImages逻辑错误
+
+#### v0.0.7
+
+1. request组件和container组件的样式允许部分自定义
