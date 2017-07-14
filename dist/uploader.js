@@ -238,7 +238,7 @@ exports.default = {
         uploadWechatImages: function uploadWechatImages(localIds) {
             var vm = this;
             var localId = localIds.shift();
-            uploadWechatImage(localId).then(function (_ref) {
+            return (0, _wx.uploadImage)(localId).then(function (_ref) {
                 var image = _ref.image,
                     serverId = _ref.serverId;
 
@@ -266,10 +266,6 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
 //
 //
 //
@@ -294,12 +290,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 
-exports.default = _defineProperty({
-    render: function render(h) {
-        var items = [];
-        for (var i = 0, len = images.length; i < len; i++) {}
-    },
-
+/**
+ * @load 当图片上传开始时
+ * @finish 当图片上传结束时
+ */
+exports.default = {
     name: 'ROUploader',
     props: {
         /**
@@ -435,7 +430,7 @@ exports.default = _defineProperty({
             };
         }
     }
-}, 'render', function render() {});
+};
 
 /***/ }),
 /* 3 */
@@ -716,16 +711,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     style: (_vm.containerStyle)
   }, [_vm._l((_vm.images), function(image, index) {
     return _c('div', {
-      directives: [{
-        name: "pressure-press",
-        rawName: "v-pressure-press",
-        value: (_vm.onPress),
-        expression: "onPress"
-      }],
-      staticClass: "ro-uploader-image-wrap",
-      attrs: {
-        "data-test": "true"
-      }
+      staticClass: "ro-uploader-image-wrap"
     }, [_c('div', {
       directives: [{
         name: "pressure-press",
