@@ -22,6 +22,10 @@
 </template>
 
 <script>
+    /**
+     * @load 当图片上传开始时
+     * @finish 当图片上传结束时
+     */
     export default {
         name: 'ROUploader',
         props: {
