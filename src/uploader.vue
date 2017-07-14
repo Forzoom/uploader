@@ -2,14 +2,13 @@
     <div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">
         <div
             v-for="(image, index) in images"
-            class="ro-uploader-image-wrap"
-            v-pressure-press="onPress"
-            data-test="true">
+            class="ro-uploader-image-wrap">
             <div
                 class="ro-uploader-image"
                 :style="{'background-image': 'url(' + image + ')'}"
                 @click="onClickImage(index)"
-                v-pressure-press="onPress(index)"></div>
+                v-pressure-press="onPress(index)">
+            </div>
             <div v-if="canModify" class="ro-uploader-remove" @click="onClickRemove(index)"></div>
         </div>
         <div
@@ -24,12 +23,6 @@
 
 <script>
     export default {
-        render(h) {
-            const items = [];
-            for (let i = 0, len = images.length; i < len; i++) {
-                
-            }
-        },
         name: 'ROUploader',
         props: {
             /**
@@ -154,9 +147,6 @@
                     this.$emit('menu', index);
                 }
             },
-        },
-        render() {
-
         },
     };
 </script>
