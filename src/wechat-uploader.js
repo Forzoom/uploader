@@ -123,8 +123,8 @@ export default {
             const vm = this;
             const localId = localIds.shift();
             return uploadImage(localId)
-            .then(function({ image, serverId, }) {
-                vm.add(image, serverId);
+            .then(function(serverId) {
+                vm.add(localId, serverId);
                 if (localIds.length > 0) {
                     return vm.uploadWechatImages(localIds);
                 }

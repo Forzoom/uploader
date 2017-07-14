@@ -238,11 +238,8 @@ exports.default = {
         uploadWechatImages: function uploadWechatImages(localIds) {
             var vm = this;
             var localId = localIds.shift();
-            return (0, _wx.uploadImage)(localId).then(function (_ref) {
-                var image = _ref.image,
-                    serverId = _ref.serverId;
-
-                vm.add(image, serverId);
+            return (0, _wx.uploadImage)(localId).then(function (serverId) {
+                vm.add(localId, serverId);
                 if (localIds.length > 0) {
                     return vm.uploadWechatImages(localIds);
                 }
