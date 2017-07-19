@@ -78,3 +78,7 @@
 #### v0.0.8
 
 1. 修复错误
+
+#### v0.0.9
+
+1. 添加 removeAll / getCount / getSize 函数

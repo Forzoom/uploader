@@ -81,7 +81,9 @@
             };
         },
         methods: {
-            // 重置所有的images列表
+            /**
+             * 重置所有的images列表，不会触发任何的remove和add事件
+             */
             setImages(images) {
                 const tmp = [];
                 for (let i = 0, len = images.length; i < len; i++) {
@@ -91,8 +93,11 @@
             },
             /**
              * 添加图片
+             *  将触发@add(image)事件
              *
              * @param {string} image
+             *
+             * @return {boolean} 成功返回true，否则返回false
              */
             add(image) {
                 if (this.images.length < this.size) {
@@ -104,8 +109,11 @@
             },
             /**
              * 删除图片
+             *  将触发@remove(index)事件
              *
              * @param {number} index
+             *
+             * @return {boolean} true表示删除成功，false表示失败
              */
             remove(index) {
                 if (0 <= index && index < this.size) {
@@ -114,6 +122,15 @@
                     return true;
                 }
                 return false;
+            },
+            /**
+             * 删除所有的图片
+             */
+            removeAll() {
+                for (let i = 0, len = this.images.length; i < len; i++) {
+                    this.remove(i);
+                }
+                return true;
             },
             /**
              * 获得所有图片
@@ -151,6 +168,18 @@
                     this.$emit('menu', index);
                 }
             },
+            /**
+             * 获得允许上传的容量
+             */
+            getSize() {
+                return this.size;
+            },
+            /**
+             * 获得当前已经上传的图片的数量
+             */
+            getCount() {
+                return this.images.length;
+            },
         },
     };
 </script>
@@ -179,6 +208,7 @@
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
+                background-color: #aaaaaa;
             }
             .ro-uploader-remove {
                 position: absolute;

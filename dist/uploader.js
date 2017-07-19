@@ -347,7 +347,9 @@ exports.default = {
     },
 
     methods: {
-        // 重置所有的images列表
+        /**
+         * 重置所有的images列表，不会触发任何的remove和add事件
+         */
         setImages: function setImages(images) {
             var tmp = [];
             for (var i = 0, len = images.length; i < len; i++) {
@@ -358,8 +360,11 @@ exports.default = {
 
         /**
          * 添加图片
+         *  将触发@add(image)事件
          *
          * @param {string} image
+         *
+         * @return {boolean} 成功返回true，否则返回false
          */
         add: function add(image) {
             if (this.images.length < this.size) {
@@ -372,8 +377,11 @@ exports.default = {
 
         /**
          * 删除图片
+         *  将触发@remove(index)事件
          *
          * @param {number} index
+         *
+         * @return {boolean} true表示删除成功，false表示失败
          */
         remove: function remove(index) {
             if (0 <= index && index < this.size) {
@@ -382,6 +390,16 @@ exports.default = {
                 return true;
             }
             return false;
+        },
+
+        /**
+         * 删除所有的图片
+         */
+        removeAll: function removeAll() {
+            for (var i = 0, len = this.images.length; i < len; i++) {
+                this.remove(i);
+            }
+            return true;
         },
 
         /**
@@ -425,6 +443,20 @@ exports.default = {
             return function () {
                 _this.$emit('menu', index);
             };
+        },
+
+        /**
+         * 获得允许上传的容量
+         */
+        getSize: function getSize() {
+            return this.size;
+        },
+
+        /**
+         * 获得当前已经上传的图片的数量
+         */
+        getCount: function getCount() {
+            return this.images.length;
         }
     }
 };
@@ -513,7 +545,7 @@ exports = module.exports = __webpack_require__(5)(undefined);
 
 
 // module
-exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{background-color:#fff;transform:translate(-50%,-50%) rotate(45deg)}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #aaa}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}.ro-uploader-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-remove:before,.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}", ""]);
+exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%;background-color:#aaa}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{background-color:#fff;transform:translate(-50%,-50%) rotate(45deg)}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #aaa}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}.ro-uploader-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-remove:before,.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}", ""]);
 
 // exports
 
