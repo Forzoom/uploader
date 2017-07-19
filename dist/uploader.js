@@ -347,7 +347,9 @@ exports.default = {
     },
 
     methods: {
-        // 重置所有的images列表
+        /**
+         * 重置所有的images列表，不会触发任何的remove和add事件
+         */
         setImages: function setImages(images) {
             var tmp = [];
             for (var i = 0, len = images.length; i < len; i++) {
@@ -358,8 +360,11 @@ exports.default = {
 
         /**
          * 添加图片
+         *  将触发@add(image)事件
          *
          * @param {string} image
+         *
+         * @return {boolean} 成功返回true，否则返回false
          */
         add: function add(image) {
             if (this.images.length < this.size) {
@@ -372,8 +377,11 @@ exports.default = {
 
         /**
          * 删除图片
+         *  将触发@remove(index)事件
          *
          * @param {number} index
+         *
+         * @return {boolean} true表示删除成功，false表示失败
          */
         remove: function remove(index) {
             if (0 <= index && index < this.size) {
@@ -382,6 +390,16 @@ exports.default = {
                 return true;
             }
             return false;
+        },
+
+        /**
+         * 删除所有的图片
+         */
+        removeAll: function removeAll() {
+            for (var i = 0, len = this.images.length; i < len; i++) {
+                this.remove(i);
+            }
+            return true;
         },
 
         /**
@@ -425,6 +443,20 @@ exports.default = {
             return function () {
                 _this.$emit('menu', index);
             };
+        },
+
+        /**
+         * 获得允许上传的容量
+         */
+        getSize: function getSize() {
+            return this.size;
+        },
+
+        /**
+         * 获得当前已经上传的图片的数量
+         */
+        getCount: function getCount() {
+            return this.images.length;
         }
     }
 };
