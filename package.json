@@ -1,6 +1,6 @@
 {
   "name": "@forzoom/uploader",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "uploader component",
   "main": "dist/uploader.min.js",
   "scripts": {

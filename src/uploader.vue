@@ -201,6 +201,7 @@
         text-decoration: none;
         .ro-uploader-image-wrap {
             position: relative;
+            margin-right: 5px;
             .ro-uploader-image {
                 vertical-align: middle;
                 width: @size;
@@ -247,6 +248,7 @@
             width: @size;
             height: @size;
             border: @border-width solid #aaaaaa;
+            box-sizing: border-box;
             &:before,
             &:after {
                 background-color: @border-color;
