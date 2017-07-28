@@ -5,7 +5,8 @@
             class="ro-uploader-image-wrap">
             <div
                 class="ro-uploader-image"
-                :style="{'background-image': 'url(' + image + ')'}"
+                :class="imageClass"
+                :style="[{'background-image': 'url(' + image + ')'}, imageStyle]"
                 @click="onClickImage(index)"
                 v-pressure-press="onPress(index)">
             </div>
@@ -43,6 +44,9 @@
                 type: Boolean,
                 default: true,
             },
+            /**
+             * 容器对象类
+             */
             containerClass: {
                 type: [ Object, Array, ],
                 default() {
@@ -50,7 +54,7 @@
                 },
             },
             /**
-             * 容器样式
+             * 容器对象样式
              */
             containerStyle: {
                 type: Object,
@@ -58,6 +62,27 @@
                     return {};
                 },
             },
+            /**
+             * 图片对象类
+             */
+            imageClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 图片对象类
+             */
+            imageStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 请求对象类
+             */
             requestClass: {
                 type: [ Object, Array, ],
                 default() {
@@ -65,7 +90,7 @@
                 },
             },
             /**
-             * 请求对象的样式
+             * 请求对象样式
              */
             requestStyle: {
                 type: Object,

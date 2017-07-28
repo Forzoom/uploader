@@ -90,3 +90,7 @@
 #### v0.0.11
 
 1. 优化样式
+
+#### v0.0.12
+
+1. 添加props: imageStyle/imageClass

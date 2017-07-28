@@ -286,6 +286,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
 
 /**
  * @load 当图片上传开始时
@@ -308,6 +309,9 @@ exports.default = {
             type: Boolean,
             default: true
         },
+        /**
+         * 容器对象类
+         */
         containerClass: {
             type: [Object, Array],
             default: function _default() {
@@ -315,7 +319,7 @@ exports.default = {
             }
         },
         /**
-         * 容器样式
+         * 容器对象样式
          */
         containerStyle: {
             type: Object,
@@ -323,6 +327,27 @@ exports.default = {
                 return {};
             }
         },
+        /**
+         * 图片对象类
+         */
+        imageClass: {
+            type: [Object, Array],
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * 图片对象类
+         */
+        imageStyle: {
+            type: Object,
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * 请求对象类
+         */
         requestClass: {
             type: [Object, Array],
             default: function _default() {
@@ -330,7 +355,7 @@ exports.default = {
             }
         },
         /**
-         * 请求对象的样式
+         * 请求对象样式
          */
         requestStyle: {
             type: Object,
@@ -749,9 +774,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         expression: "onPress(index)"
       }],
       staticClass: "ro-uploader-image",
-      style: ({
+      class: _vm.imageClass,
+      style: ([{
         'background-image': 'url(' + image + ')'
-      }),
+      }, _vm.imageStyle]),
       on: {
         "click": function($event) {
           _vm.onClickImage(index)
@@ -786,7 +812,7 @@ var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("5a82b071", content, true);
+var update = __webpack_require__(9)("4fb8864b", content, true);
 
 /***/ }),
 /* 9 */
