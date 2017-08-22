@@ -143,6 +143,15 @@ function uploadWechatImage(localId) {
 exports.default = {
     name: 'WechatUploader',
     extends: _uploader2.default,
+    props: {
+        /**
+         * 是否使用微信的预览内容
+         */
+        useWechatPreview: {
+            type: Boolean,
+            default: true
+        }
+    },
     data: function data() {
         return {
             /**
@@ -221,6 +230,13 @@ exports.default = {
          * 要求添加新的图片
          */
         onClickRequest: function onClickRequest() {
+            this.request();
+        },
+
+        /**
+         * 请求图片上传
+         */
+        request: function request() {
             var vm = this;
             return (0, _wx.chooseImage)(vm.size - vm.images.length).then(function (localIds) {
                 if (localIds.length > 0) {
@@ -238,8 +254,11 @@ exports.default = {
         uploadWechatImages: function uploadWechatImages(localIds) {
             var vm = this;
             var localId = localIds.shift();
-            return (0, _wx.uploadImage)(localId).then(function (serverId) {
-                vm.add(localId, serverId);
+            return uploadWechatImage(localId).then(function (_ref) {
+                var image = _ref.image,
+                    serverId = _ref.serverId;
+
+                vm.add(image, serverId);
                 if (localIds.length > 0) {
                     return vm.uploadWechatImages(localIds);
                 }
@@ -263,6 +282,8 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+//
+//
 //
 //
 //
@@ -337,9 +358,27 @@ exports.default = {
             }
         },
         /**
-         * 图片对象类
+         * 图片对象样式
          */
         imageStyle: {
+            type: Object,
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * wrap
+         */
+        imageWrapClass: {
+            type: [Object, Array],
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * wrap
+         */
+        imageWrapStyle: {
             type: Object,
             default: function _default() {
                 return {};
@@ -358,6 +397,24 @@ exports.default = {
          * 请求对象样式
          */
         requestStyle: {
+            type: Object,
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * 删除按钮样式类
+         */
+        removeClass: {
+            type: [Object, Array],
+            default: function _default() {
+                return {};
+            }
+        },
+        /**
+         * 删除按钮样式
+         */
+        removeStyle: {
             type: Object,
             default: function _default() {
                 return {};
@@ -765,7 +822,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     style: (_vm.containerStyle)
   }, [_vm._l((_vm.images), function(image, index) {
     return _c('div', {
-      staticClass: "ro-uploader-image-wrap"
+      staticClass: "ro-uploader-image-wrap",
+      class: _vm.imageWrapClass,
+      style: (_vm.imageWrapStyle)
     }, [_c('div', {
       directives: [{
         name: "pressure-press",
@@ -785,6 +844,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }), _vm._v(" "), (_vm.canModify) ? _c('div', {
       staticClass: "ro-uploader-remove",
+      class: _vm.removeClass,
+      style: (_vm.removeStyle),
       on: {
         "click": function($event) {
           _vm.onClickRemove(index)

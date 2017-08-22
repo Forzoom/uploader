@@ -32,6 +32,15 @@ function uploadWechatImage(localId) {
 export default {
     name: 'WechatUploader',
     extends: Uploader,
+    props: {
+        /**
+         * 是否使用微信的预览内容
+         */
+        useWechatPreview: {
+            type: Boolean,
+            default: true,
+        },
+    },
     data() {
         return {
             /**
@@ -105,6 +114,12 @@ export default {
          * 要求添加新的图片
          */
         onClickRequest() {
+            this.request();
+        },
+        /**
+         * 请求图片上传
+         */
+        request() {
             const vm = this;
             return chooseImage(vm.size - vm.images.length)
                 .then((localIds) => {
@@ -122,9 +137,9 @@ export default {
         uploadWechatImages(localIds) {
             const vm = this;
             const localId = localIds.shift();
-            return uploadImage(localId)
-            .then(function(serverId) {
-                vm.add(localId, serverId);
+            return uploadWechatImage(localId)
+            .then(function({ image, serverId, }) {
+                vm.add(image, serverId);
                 if (localIds.length > 0) {
                     return vm.uploadWechatImages(localIds);
                 }

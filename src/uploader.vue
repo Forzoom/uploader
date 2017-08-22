@@ -2,7 +2,9 @@
     <div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">
         <div
             v-for="(image, index) in images"
-            class="ro-uploader-image-wrap">
+            class="ro-uploader-image-wrap"
+            :class="imageWrapClass"
+            :style="imageWrapStyle">
             <div
                 class="ro-uploader-image"
                 :class="imageClass"
@@ -10,7 +12,7 @@
                 @click="onClickImage(index)"
                 v-pressure-press="onPress(index)">
             </div>
-            <div v-if="canModify" class="ro-uploader-remove" @click="onClickRemove(index)"></div>
+            <div v-if="canModify" class="ro-uploader-remove" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"></div>
         </div>
         <div
             class="ro-uploader-image-wrap ro-uploader-request"
@@ -72,9 +74,27 @@
                 },
             },
             /**
-             * 图片对象类
+             * 图片对象样式
              */
             imageStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * wrap
+             */
+            imageWrapClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * wrap
+             */
+            imageWrapStyle: {
                 type: Object,
                 default() {
                     return {};
@@ -93,6 +113,24 @@
              * 请求对象样式
              */
             requestStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 删除按钮样式类
+             */
+            removeClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 删除按钮样式
+             */
+            removeStyle: {
                 type: Object,
                 default() {
                     return {};
