@@ -17,6 +17,7 @@
 |imageWrapClass|\{\}|图片容器样式类|
 |imageWrapStyle|\{\}|图片容器样式|
 |useWechatPreview|true|是否使用微信JSSDK预览|
+|lazyload|false|是否使用vue-lazyload|
 
 ##### 事件
 
@@ -168,3 +169,7 @@ __script__
 #### v0.0.15
 
 1. 添加props，mageWrapClass和imageWrapStyle
+
+#### v0.0.16
+
+1. 添加prop: lazyload
