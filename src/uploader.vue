@@ -5,10 +5,18 @@
             class="ro-uploader-image-wrap"
             :class="imageWrapClass"
             :style="imageWrapStyle">
-            <div
+            <div v-if="!lazyload"
                 class="ro-uploader-image"
                 :class="imageClass"
                 :style="[{'background-image': 'url(' + image + ')'}, imageStyle]"
+                @click="onClickImage(index)"
+                v-pressure-press="onPress(index)">
+            </div>
+            <div v-else
+                class="ro-uploader-image"
+                :class="imageClass"
+                v-lazy:background-image="image"
+                :style="[imageStyle]"
                 @click="onClickImage(index)"
                 v-pressure-press="onPress(index)">
             </div>
@@ -135,6 +143,13 @@
                 default() {
                     return {};
                 },
+            },
+            /**
+             * 调用lazyload，因为无法确定存在vue-lazyload库，所以默认false
+             */
+            lazyload: {
+                type: Boolean,
+                default: false,
             },
         },
         data() {

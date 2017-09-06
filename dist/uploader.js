@@ -308,6 +308,14 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /**
  * @load 当图片上传开始时
@@ -419,6 +427,13 @@ exports.default = {
             default: function _default() {
                 return {};
             }
+        },
+        /**
+         * 调用lazyload，因为无法确定存在vue-lazyload库，所以默认false
+         */
+        lazyload: {
+            type: Boolean,
+            default: false
         }
     },
     data: function data() {
@@ -825,7 +840,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "ro-uploader-image-wrap",
       class: _vm.imageWrapClass,
       style: (_vm.imageWrapStyle)
-    }, [_c('div', {
+    }, [(!_vm.lazyload) ? _c('div', {
       directives: [{
         name: "pressure-press",
         rawName: "v-pressure-press",
@@ -837,6 +852,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       style: ([{
         'background-image': 'url(' + image + ')'
       }, _vm.imageStyle]),
+      on: {
+        "click": function($event) {
+          _vm.onClickImage(index)
+        }
+      }
+    }) : _c('div', {
+      directives: [{
+        name: "lazy",
+        rawName: "v-lazy:background-image",
+        value: (image),
+        expression: "image",
+        arg: "background-image"
+      }, {
+        name: "pressure-press",
+        rawName: "v-pressure-press",
+        value: (_vm.onPress(index)),
+        expression: "onPress(index)"
+      }],
+      staticClass: "ro-uploader-image",
+      class: _vm.imageClass,
+      style: ([_vm.imageStyle]),
       on: {
         "click": function($event) {
           _vm.onClickImage(index)
