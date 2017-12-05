@@ -147,8 +147,8 @@ export default {
         },
     },
     mounted() {
-        this.$on('click', function(image) {
-            previewImage(image, this.images);
+        this.$on('click', function(index) {
+            previewImage(this.images[index], this.images);
         });
     },
 };

@@ -266,8 +266,8 @@ exports.default = {
         }
     },
     mounted: function mounted() {
-        this.$on('click', function (image) {
-            (0, _wx.previewImage)(image, this.images);
+        this.$on('click', function (index) {
+            (0, _wx.previewImage)(this.images[index], this.images);
         });
     }
 };
