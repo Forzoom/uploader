@@ -1,6 +1,27 @@
+### Install
+
+npm install @forzoom/uploader
+
 ### Usage
 
 #### WechatUploader
+
+![Example](assets/img1.png)
+
+大致上存在四种元素，分别是“容器”，“图片元素”，“添加按钮”，“图片容器”
+嵌套结构为
+
+    1. “容器”
+	    2. “图片容器”
+		    3. “图片元素”
+		    3. 其他元素
+	    2. “添加按钮”
+
+上图中，“咖啡”图片实际上有一个“图片容器”和一个“图片元素”组成
+第三个是一个“添加按钮”
+点击添加按钮能够调用JSSDK中的图片上传逻辑
+
+__根据需要，可以使用Props中的样式内容修改不同元素的样式__
 
 ##### Props
 
@@ -8,18 +29,18 @@
 |---|---|---|
 |size|1|允许最大上传图片数量|
 |canModify|true|是否允许修改|
-|containerClass|\{\}|容器元素样式类|
-|containerStyle|\{\}|容器元素样式|
-|imageClass|\{\}|每个图片元素样式类|
-|imageStyle|\{\}|每个图片元素样式|
-|requestClass|\{\}|添加按钮样式类|
-|requestStyle|\{\}|添加按钮样式|
-|imageWrapClass|\{\}|图片容器样式类|
-|imageWrapStyle|\{\}|图片容器样式|
+|containerClass|\{\}|“容器”元素样式类|
+|containerStyle|\{\}|“容器”元素样式|
+|imageClass|\{\}|每个“图片元素”样式类|
+|imageStyle|\{\}|每个“图片元素”样式|
+|requestClass|\{\}|“添加按钮”样式类|
+|requestStyle|\{\}|“添加按钮”样式|
+|imageWrapClass|\{\}|“图片容器”样式类|
+|imageWrapStyle|\{\}|“图片容器”样式|
 |useWechatPreview|true|是否使用微信JSSDK预览|
 |lazyload|false|是否使用vue-lazyload|
 
-##### 事件
+##### 自定义事件
 
 |名称|参数|说明|
 |---|---|---|
@@ -35,13 +56,20 @@
 |---|---|---|
 |request|无|发起图片上传|
 |removeAll|无|删除所有图片|
-|getImages|无|获得所有图片内容|
+|setImages|无|设置默认显示的图片|
+|getImages|无|获得所有图片|
+
+##### 示例
 
 ###### WechatUploader.setImages
+
+设置uploader中默认的图片内容（注意，如果uploader被销毁的情况下，设置的内容自然也会消失）
 
 __html__
 
 ```html
+	<!-- size="4": 显示多少个图片 -->
+	<!-- can-modify="false": 不允许修改，只允许查看 -->
 	<WechatUploader
 		ref="uploader"
 		:size="4"
@@ -61,6 +89,8 @@ __script__
 ```
 
 ###### WechatUploader.getImages
+
+获得uploader中当前的图片内容
 
 ```javascript
 	const images = this.$refs.uploader.getImages();
