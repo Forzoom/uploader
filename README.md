@@ -46,7 +46,7 @@ __根据需要，可以使用Props中的样式内容修改不同元素的样式_
 |---|---|---|
 |load|无|图片上传到微信服务器开始|
 |finish|无|图片上传到微信服务器结束|
-|add| \{ localId, serverId \} |有图片增加|
+|add| \{ localId, serverId, res, \} |有图片增加|
 |remove|index (被删除图片位置)|有图片被删除|
 |click|index (被点击图片位置)|当正在显示的图片被点击|
 
@@ -211,3 +211,7 @@ __script__
 #### v0.0.18
 
 1. 修复preview的错误
+
+#### 0.0.20
+
+1. add事件添加参数res，变成add(image, serverId, res)

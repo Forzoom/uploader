@@ -26,7 +26,8 @@ export function chooseImage(count) {
  * 默认不显示progress
  * @param localId
  *
- * @return {Promise} serverId
+ * @return {Promise} res
+ *  - serverId
  */
 export function uploadImage(localId) {
     return new Promise(function(resolve, reject) {
@@ -34,7 +35,7 @@ export function uploadImage(localId) {
             localId,
             isShowProgressTips: 0,
             success: function(res) {
-                return resolve(res.serverId);
+                return resolve(res);
             },
         });
     });

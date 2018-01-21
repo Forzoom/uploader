@@ -590,6 +590,7 @@ function chooseImage(count) {
             count: count,
             sizeType: ['compressed'],
             success: function success(res) {
+                console.log('chooseImage', res);
                 return resolve(res.localIds);
             }
         });
