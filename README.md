@@ -46,9 +46,10 @@ __根据需要，可以使用Props中的样式内容修改不同元素的样式_
 |---|---|---|
 |load|无|图片上传到微信服务器开始|
 |finish|无|图片上传到微信服务器结束|
-|add| \{ localId, serverId, res, \} |有图片增加|
+|add| \{ localId, serverId, \} |有图片增加|
 |remove|index (被删除图片位置)|有图片被删除|
 |click|index (被点击图片位置)|当正在显示的图片被点击|
+|choose|sourceType|图片来源|
 
 ##### 函数
 
@@ -122,6 +123,10 @@ __script__
 
 1. WechatUploader中setImages(images: Array<image>)函数修改为setImages(data: Array<{image, serverId}>)
 2. WechatUploader中getImages: Array<image>函数修改为getImages: Array<{image, serverId}>
+
+#### 0.0.21
+
+1. 删除add事件中的res，添加choose事件
 
 ### Version
 
@@ -215,3 +220,7 @@ __script__
 #### 0.0.20
 
 1. add事件添加参数res，变成add(image, serverId, res)
+
+#### 0.0.21
+
+1. 回滚0.0.20功能，添加choose(sourceType)事件

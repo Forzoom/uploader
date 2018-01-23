@@ -8,7 +8,8 @@ export function previewImage(image, images) {
 }
 
 /**
- * @return {Promise} localIds: Array<string>
+ * @return {Promise} res
+ *  - localIds: Array<string>
  */
 export function chooseImage(count) {
     return new Promise(function(resolve, reject) {
@@ -16,7 +17,7 @@ export function chooseImage(count) {
             count,
             sizeType: ['compressed'],
             success: function(res) {
-                return resolve(res.localIds);
+                return resolve(res);
             },
         });
     });

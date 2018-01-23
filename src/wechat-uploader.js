@@ -9,20 +9,19 @@ import Uploader from './uploader.vue';
 /**
  *
  *
- * @return {Promise} {image, serverId, res}
+ * @return {Promise} {image, serverId}
  */
 function uploadWechatImage(localId) {
-    let res = null;
+    let serverId = null;
     return uploadImage(localId).then((_res) => {
-        res = _res; // 记录res
+        serverId = _res.serverId; // 记录res
         return localId;
     })
     .then(getLocalImgData) // 权限检测可能不应该这样使用
     .then((imageData) => {
         return {
             image: imageData,
-            serverId: res.serverId,
-            res,
+            serverId: serverId,
         }
     });
 }
@@ -125,8 +124,10 @@ export default {
         request() {
             const vm = this;
             return chooseImage(vm.size - vm.images.length)
-                .then((localIds) => {
+                .then((res) => {
+                    const localIds = res.localIds;
                     if (localIds.length > 0) {
+                        vm.$emit('choose', res);
                         vm.$emit('load');
                         return vm.uploadWechatImages(localIds).then(function() {
                             vm.$emit('finish');
