@@ -41,77 +41,7 @@ export default {
             default: true,
         },
     },
-    data() {
-        return {
-            /**
-             * 保存所有的serverId
-             */
-            serverIds: [],
-        };
-    },
     methods: {
-        /**
-         * @param {Array<{image, serverId}>} data
-         */
-        setImages(data) {
-            const images = [];
-            const serverIds = [];
-            for (let i = 0, len = data.length; i < len; i++) {
-                images.push(data[i].image);
-                serverIds.push(data[i].serverId);
-            }
-            this.images = images;
-            this.serverIds = serverIds;
-        },
-        /**
-         * 添加图片
-         *
-         * @param {} image 图片内容
-         * @param {} serverId 
-         * @param {} res 资源数据
-         */
-        add(image, serverId, res) {
-            if (this.images.length < this.size) {
-                this.images.push(image);
-                this.serverIds.push(serverId);
-                this.$emit('add', {
-                    image,
-                    serverId,
-                    res,
-                });
-                return true;
-            }
-            return false;
-        },
-        /**
-         * 获得所有的图片内容
-         *
-         * @return {Array<{image, serverId}>} 
-         */
-        getImages() {
-            const result = [];
-            for (let i = 0, len = this.images.length; i < len; i++) {
-                result.push({
-                    image: this.images[i],
-                    serverId: this.serverIds[i],
-                });
-            }
-            return result;
-        },
-        /**
-         * 删除图片
-         *
-         * @param {} index
-         */
-        remove(index) {
-            if (0 <= index && index < this.size) {
-                this.images.splice(index, 1);
-                this.serverIds.splice(index, 1);
-                this.$emit('remove', index);
-                return true;
-            }
-            return false;
-        },
         /**
          * 要求添加新的图片
          */
@@ -143,7 +73,7 @@ export default {
             const localId = localIds.shift();
             return uploadWechatImage(localId)
             .then(function({ image, serverId, res, }) {
-                vm.add(image, serverId, res);
+                vm.add({image, serverId});
                 if (localIds.length > 0) {
                     return vm.uploadWechatImages(localIds);
                 }
@@ -152,7 +82,7 @@ export default {
     },
     mounted() {
         this.$on('click', function(index) {
-            previewImage(this.images[index], this.images);
+            previewImage(this.images[index].image, this.images.map(image => image.image));
         });
     },
 };

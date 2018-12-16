@@ -1,1187 +1,630 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else if(typeof exports === 'object')
-		exports["uploader"] = factory();
-	else
-		root["uploader"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (factory((global.Uploader = {})));
+}(this, (function (exports) { 'use strict';
 
-function injectStyle (ssrContext) {
-  __webpack_require__(8)
-}
-var Component = __webpack_require__(6)(
-  /* script */
-  __webpack_require__(2),
-  /* template */
-  __webpack_require__(7),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
 
-module.exports = Component.exports
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _wx = __webpack_require__(3);
-
-var _uploader = __webpack_require__(0);
-
-var _uploader2 = _interopRequireDefault(_uploader);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- *
- *
- * @return {Promise} {image, serverId}
- */
-function uploadWechatImage(localId) {
-    var serverId = null;
-    return (0, _wx.uploadImage)(localId).then(function (_serverId) {
-        serverId = _serverId; // 记录serverId
-        return localId;
-    }).then(_wx.getLocalImgData) // 权限检测可能不应该这样使用
-    .then(function (imageData) {
-        return {
-            image: imageData,
-            serverId: serverId
-        };
-    });
-}
-
-/**
- * 
- */
-exports.default = {
-    name: 'WechatUploader',
-    extends: _uploader2.default,
-    props: {
-        /**
-         * 是否使用微信的预览内容
-         */
-        useWechatPreview: {
-            type: Boolean,
-            default: true
-        }
-    },
-    data: function data() {
-        return {
+    /**
+     * @load 当图片上传开始时
+     * @finish 当图片上传结束时
+     */
+    var script = {
+        name: 'ROUploader',
+        props: {
             /**
-             * 保存所有的serverId
+             * 允许上传图片个数
              */
-            serverIds: []
-        };
-    },
-
-    methods: {
-        /**
-         * @param {Array<{image, serverId}>} data
-         */
-        setImages: function setImages(data) {
-            var images = [];
-            var serverIds = [];
-            for (var i = 0, len = data.length; i < len; i++) {
-                images.push(data[i].image);
-                serverIds.push(data[i].serverId);
-            }
-            this.images = images;
-            this.serverIds = serverIds;
+            size: {
+                type: Number,
+                default: 1,
+            },
+            /**
+             * 是否允许修改
+             */
+            canModify: {
+                type: Boolean,
+                default: true,
+            },
+            /**
+             * 容器对象类
+             */
+            containerClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 容器对象样式
+             */
+            containerStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 图片对象类
+             */
+            imageClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 图片对象样式
+             */
+            imageStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * wrap
+             */
+            imageWrapClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * wrap
+             */
+            imageWrapStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 请求对象类
+             */
+            requestClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 请求对象样式
+             */
+            requestStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 删除按钮样式类
+             */
+            removeClass: {
+                type: [ Object, Array, ],
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 删除按钮样式
+             */
+            removeStyle: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+            /**
+             * 调用lazyload，因为无法确定存在vue-lazyload库，所以默认false
+             */
+            lazyload: {
+                type: Boolean,
+                default: false,
+            },
         },
-
-        /**
-         * 添加图片
-         *
-         * @param {} image 图片内容
-         * @param {} serverId 
-         */
-        add: function add(image, serverId) {
-            if (this.images.length < this.size) {
-                this.images.push(image);
-                this.serverIds.push(serverId);
-                this.$emit('add', {
-                    image: image,
-                    serverId: serverId
-                });
-                return true;
-            }
-            return false;
-        },
-
-        /**
-         * 获得所有的图片内容
-         *
-         * @return {Array<{image, serverId}>} 
-         */
-        getImages: function getImages() {
-            var result = [];
-            for (var i = 0, len = this.images.length; i < len; i++) {
-                result.push({
-                    image: this.images[i],
-                    serverId: this.serverIds[i]
-                });
-            }
-            return result;
-        },
-
-        /**
-         * 删除图片
-         *
-         * @param {} index
-         */
-        remove: function remove(index) {
-            if (0 <= index && index < this.size) {
-                this.images.splice(index, 1);
-                this.serverIds.splice(index, 1);
-                this.$emit('remove', index);
-                return true;
-            }
-            return false;
-        },
-
-        /**
-         * 要求添加新的图片
-         */
-        onClickRequest: function onClickRequest() {
-            this.request();
-        },
-
-        /**
-         * 请求图片上传
-         */
-        request: function request() {
-            var vm = this;
-            return (0, _wx.chooseImage)(vm.size - vm.images.length).then(function (localIds) {
-                if (localIds.length > 0) {
-                    vm.$emit('load');
-                    return vm.uploadWechatImages(localIds).then(function () {
-                        vm.$emit('finish');
-                    });
-                }
-            });
-        },
-
-        /**
-         * 上传多张图片，需要保证一张上传完成之后，再上传另外一张
-         */
-        uploadWechatImages: function uploadWechatImages(localIds) {
-            var vm = this;
-            var localId = localIds.shift();
-            return uploadWechatImage(localId).then(function (_ref) {
-                var image = _ref.image,
-                    serverId = _ref.serverId;
-
-                vm.add(image, serverId);
-                if (localIds.length > 0) {
-                    return vm.uploadWechatImages(localIds);
-                }
-            });
-        }
-    },
-    mounted: function mounted() {
-        this.$on('click', function (index) {
-            (0, _wx.previewImage)(this.images[index], this.images);
-        });
-    }
-};
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/**
- * @load 当图片上传开始时
- * @finish 当图片上传结束时
- */
-exports.default = {
-    name: 'ROUploader',
-    props: {
-        /**
-         * 允许上传图片个数
-         */
-        size: {
-            type: Number,
-            default: 1
-        },
-        /**
-         * 是否允许修改
-         */
-        canModify: {
-            type: Boolean,
-            default: true
-        },
-        /**
-         * 容器对象类
-         */
-        containerClass: {
-            type: [Object, Array],
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 容器对象样式
-         */
-        containerStyle: {
-            type: Object,
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 图片对象类
-         */
-        imageClass: {
-            type: [Object, Array],
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 图片对象样式
-         */
-        imageStyle: {
-            type: Object,
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * wrap
-         */
-        imageWrapClass: {
-            type: [Object, Array],
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * wrap
-         */
-        imageWrapStyle: {
-            type: Object,
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 请求对象类
-         */
-        requestClass: {
-            type: [Object, Array],
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 请求对象样式
-         */
-        requestStyle: {
-            type: Object,
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 删除按钮样式类
-         */
-        removeClass: {
-            type: [Object, Array],
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 删除按钮样式
-         */
-        removeStyle: {
-            type: Object,
-            default: function _default() {
-                return {};
-            }
-        },
-        /**
-         * 调用lazyload，因为无法确定存在vue-lazyload库，所以默认false
-         */
-        lazyload: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data: function data() {
-        return {
-            // 包含所有图片的数组
-            images: []
-        };
-    },
-
-    methods: {
-        /**
-         * 重置所有的images列表，不会触发任何的remove和add事件
-         */
-        setImages: function setImages(images) {
-            var tmp = [];
-            for (var i = 0, len = images.length; i < len; i++) {
-                tmp.push(images[i]);
-            }
-            this.images = tmp;
-        },
-
-        /**
-         * 添加图片
-         *  将触发@add(image)事件
-         *
-         * @param {string} image
-         *
-         * @return {boolean} 成功返回true，否则返回false
-         */
-        add: function add(image) {
-            if (this.images.length < this.size) {
-                this.images.push(image);
-                this.$emit('add', image);
-                return true;
-            }
-            return false;
-        },
-
-        /**
-         * 删除图片
-         *  将触发@remove(index)事件
-         *
-         * @param {number} index
-         *
-         * @return {boolean} true表示删除成功，false表示失败
-         */
-        remove: function remove(index) {
-            if (0 <= index && index < this.size) {
-                this.images.splice(index, 1);
-                this.$emit('remove', index);
-                return true;
-            }
-            return false;
-        },
-
-        /**
-         * 删除所有的图片
-         */
-        removeAll: function removeAll() {
-            for (var i = 0, len = this.images.length; i < len; i++) {
-                this.remove(i);
-            }
-            return true;
-        },
-
-        /**
-         * 获得所有图片
-         *
-         * @return {Array<string>}
-         */
-        getImages: function getImages() {
-            return this.images.slice(0);
-        },
-
-        /**
-         * 当点击图片时触发
-         *
-         * @param {number} index
-         */
-        onClickImage: function onClickImage(index) {
-            this.$emit('click', index);
-        },
-
-        /**
-         * 当点击删除按钮时触发
-         */
-        onClickRemove: function onClickRemove(index) {
-            this.remove(index);
-        },
-
-        /**
-         * 当点击添加按钮时
-         */
-        onClickRequest: function onClickRequest() {
-            this.$emit('request');
-        },
-
-        /**
-         * 当点击
-         */
-        onPress: function onPress(index) {
-            var _this = this;
-
-            return function () {
-                _this.$emit('menu', index);
+        data() {
+            return {
+                // 包含所有图片的数组
+                images: [],
             };
         },
-
-        /**
-         * 获得允许上传的容量
-         */
-        getSize: function getSize() {
-            return this.size;
+        methods: {
+            /**
+             * 重置所有的images列表，不会触发任何的remove和add事件
+             */
+            setImages(images) {
+                const tmp = [];
+                for (let i = 0, len = images.length; i < len; i++) {
+                    tmp.push(images[i]);
+                }
+                this.images = tmp;
+            },
+            /**
+             * 添加图片
+             *  将触发@add(image)事件
+             *
+             * @param {string} image
+             *
+             * @return {boolean} 成功返回true，否则返回false
+             */
+            add(image) {
+                if (this.images.length < this.size) {
+                    this.images.push(image);
+                    this.$emit('add', image);
+                    return true;
+                }
+                return false;
+            },
+            /**
+             * 删除图片
+             *  将触发@remove(index)事件
+             *
+             * @param {number} index
+             *
+             * @return {boolean} true表示删除成功，false表示失败
+             */
+            remove(index) {
+                if (0 <= index && index < this.size) {
+                    this.images.splice(index, 1);
+                    this.$emit('remove', index);
+                    return true;
+                }
+                return false;
+            },
+            /**
+             * 删除所有的图片
+             */
+            removeAll() {
+                for (let i = 0, len = this.images.length; i < len; i++) {
+                    this.remove(i);
+                }
+                return true;
+            },
+            /**
+             * 获得所有图片
+             *
+             * @return {Array<string>}
+             */
+            getImages() {
+                return this.images.slice(0);
+            },
+            /**
+             * 当点击图片时触发
+             *
+             * @param {number} index
+             */
+            onClickImage(index) {
+                this.$emit('click', index);
+            },
+            /**
+             * 当点击删除按钮时触发
+             */
+            onClickRemove(index) {
+                this.remove(index);
+            },
+            /**
+             * 当点击添加按钮时
+             */
+            onClickRequest() {
+                this.$emit('request');
+            },
+            /**
+             * 获得允许上传的容量
+             */
+            getSize() {
+                return this.size;
+            },
+            /**
+             * 获得当前已经上传的图片的数量
+             */
+            getCount() {
+                return this.images.length;
+            },
         },
+    };
 
-        /**
-         * 获得当前已经上传的图片的数量
-         */
-        getCount: function getCount() {
-            return this.images.length;
+    /* script */
+                const __vue_script__ = script;
+                
+    /* template */
+    var __vue_render__ = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c(
+        "div",
+        {
+          staticClass: "ro-uploader-wrap",
+          class: _vm.containerClass,
+          style: _vm.containerStyle
+        },
+        [
+          _vm._l(_vm.images, function(image, index) {
+            return _c(
+              "div",
+              {
+                key: index,
+                staticClass: "ro-uploader-image-wrap",
+                class: _vm.imageWrapClass,
+                style: _vm.imageWrapStyle
+              },
+              [
+                !_vm.lazyload
+                  ? _c("div", {
+                      staticClass: "ro-uploader-image",
+                      class: _vm.imageClass,
+                      style: [
+                        { "background-image": "url(" + image + ")" },
+                        _vm.imageStyle
+                      ],
+                      on: {
+                        click: function($event) {
+                          _vm.onClickImage(index);
+                        }
+                      }
+                    })
+                  : _c("div", {
+                      directives: [
+                        {
+                          name: "lazy",
+                          rawName: "v-lazy:background-image",
+                          value: image,
+                          expression: "image",
+                          arg: "background-image"
+                        }
+                      ],
+                      staticClass: "ro-uploader-image",
+                      class: _vm.imageClass,
+                      style: [_vm.imageStyle],
+                      on: {
+                        click: function($event) {
+                          _vm.onClickImage(index);
+                        }
+                      }
+                    }),
+                _vm._v(" "),
+                _vm.canModify
+                  ? _c("div", {
+                      staticClass: "ro-uploader-remove",
+                      class: _vm.removeClass,
+                      style: _vm.removeStyle,
+                      on: {
+                        click: function($event) {
+                          _vm.onClickRemove(index);
+                        }
+                      }
+                    })
+                  : _vm._e()
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _vm._t("request", [
+            _vm.images.length < _vm.size && _vm.canModify
+              ? _c("div", {
+                  staticClass: "ro-uploader-image-wrap ro-uploader-request",
+                  class: _vm.requestClass,
+                  style: _vm.requestStyle,
+                  on: { click: _vm.onClickRequest }
+                })
+              : _vm._e()
+          ])
+        ],
+        2
+      )
+    };
+    var __vue_staticRenderFns__ = [];
+    __vue_render__._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__ = function (inject) {
+        if (!inject) return
+        inject("data-v-7f291aa7_0", { source: "\n.ro-uploader-wrap {\n  display: flex;\n  background-color: #ffffff;\n  text-decoration: none;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap {\n  position: relative;\n  margin-right: 5px;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image {\n  vertical-align: middle;\n  width: 70px;\n  height: 70px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  background-position: center;\n  background-color: #aaaaaa;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove {\n  position: absolute;\n  width: 18px;\n  height: 18px;\n  font-size: 18px;\n  line-height: 18px;\n  color: #ffffff;\n  background-color: #aaaaaa;\n  top: 0rem;\n  right: 0rem;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before,\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after {\n  background-color: #ffffff;\n  transform: translate(-50%, -50%) rotateZ(45deg);\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before {\n  width: 2px;\n  height: 18px;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after {\n  width: 18px;\n  height: 2px;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active {\n  border-color: #ffffff;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before,\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after {\n  background-color: #ffffff;\n}\n.ro-uploader-wrap .ro-uploader-request {\n  position: relative;\n  width: 70px;\n  height: 70px;\n  border: 1px solid #aaaaaa;\n  box-sizing: border-box;\n}\n.ro-uploader-wrap .ro-uploader-request:before,\n.ro-uploader-wrap .ro-uploader-request:after {\n  background-color: #bbbbbb;\n}\n.ro-uploader-wrap .ro-uploader-request:before {\n  width: 2px;\n  height: 35px;\n}\n.ro-uploader-wrap .ro-uploader-request:after {\n  width: 35px;\n  height: 2px;\n}\n.ro-uploader-wrap .ro-uploader-request:active {\n  border-color: #888888;\n}\n.ro-uploader-wrap .ro-uploader-request:active:before,\n.ro-uploader-wrap .ro-uploader-request:active:after {\n  background-color: #888888;\n}\n.ro-uploader-wrap .ro-uploader-remove:before,\n.ro-uploader-wrap .ro-uploader-request:before,\n.ro-uploader-wrap .ro-uploader-remove:after,\n.ro-uploader-wrap .ro-uploader-request:after {\n  content: \" \";\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n", map: {"version":3,"sources":["uploader.vue"],"names":[],"mappings":";AAAA;EACE,cAAc;EACd,0BAA0B;EAC1B,sBAAsB;CACvB;AACD;EACE,mBAAmB;EACnB,kBAAkB;CACnB;AACD;EACE,uBAAuB;EACvB,YAAY;EACZ,aAAa;EACb,6BAA6B;EAC7B,uBAAuB;EACvB,4BAA4B;EAC5B,0BAA0B;CAC3B;AACD;EACE,mBAAmB;EACnB,YAAY;EACZ,aAAa;EACb,gBAAgB;EAChB,kBAAkB;EAClB,eAAe;EACf,0BAA0B;EAC1B,UAAU;EACV,YAAY;CACb;AACD;;EAEE,0BAA0B;EAC1B,gDAAgD;CACjD;AACD;EACE,WAAW;EACX,aAAa;CACd;AACD;EACE,YAAY;EACZ,YAAY;CACb;AACD;EACE,sBAAsB;CACvB;AACD;;EAEE,0BAA0B;CAC3B;AACD;EACE,mBAAmB;EACnB,YAAY;EACZ,aAAa;EACb,0BAA0B;EAC1B,uBAAuB;CACxB;AACD;;EAEE,0BAA0B;CAC3B;AACD;EACE,WAAW;EACX,aAAa;CACd;AACD;EACE,YAAY;EACZ,YAAY;CACb;AACD;EACE,sBAAsB;CACvB;AACD;;EAEE,0BAA0B;CAC3B;AACD;;;;EAIE,aAAa;EACb,mBAAmB;EACnB,SAAS;EACT,UAAU;EACV,iCAAiC;CAClC","file":"uploader.vue","sourcesContent":[".ro-uploader-wrap {\n  display: flex;\n  background-color: #ffffff;\n  text-decoration: none;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap {\n  position: relative;\n  margin-right: 5px;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image {\n  vertical-align: middle;\n  width: 70px;\n  height: 70px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  background-position: center;\n  background-color: #aaaaaa;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove {\n  position: absolute;\n  width: 18px;\n  height: 18px;\n  font-size: 18px;\n  line-height: 18px;\n  color: #ffffff;\n  background-color: #aaaaaa;\n  top: 0rem;\n  right: 0rem;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before,\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after {\n  background-color: #ffffff;\n  transform: translate(-50%, -50%) rotateZ(45deg);\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before {\n  width: 2px;\n  height: 18px;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after {\n  width: 18px;\n  height: 2px;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active {\n  border-color: #ffffff;\n}\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before,\n.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after {\n  background-color: #ffffff;\n}\n.ro-uploader-wrap .ro-uploader-request {\n  position: relative;\n  width: 70px;\n  height: 70px;\n  border: 1px solid #aaaaaa;\n  box-sizing: border-box;\n}\n.ro-uploader-wrap .ro-uploader-request:before,\n.ro-uploader-wrap .ro-uploader-request:after {\n  background-color: #bbbbbb;\n}\n.ro-uploader-wrap .ro-uploader-request:before {\n  width: 2px;\n  height: 35px;\n}\n.ro-uploader-wrap .ro-uploader-request:after {\n  width: 35px;\n  height: 2px;\n}\n.ro-uploader-wrap .ro-uploader-request:active {\n  border-color: #888888;\n}\n.ro-uploader-wrap .ro-uploader-request:active:before,\n.ro-uploader-wrap .ro-uploader-request:active:after {\n  background-color: #888888;\n}\n.ro-uploader-wrap .ro-uploader-remove:before,\n.ro-uploader-wrap .ro-uploader-request:before,\n.ro-uploader-wrap .ro-uploader-remove:after,\n.ro-uploader-wrap .ro-uploader-request:after {\n  content: \" \";\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n"]}, media: undefined });
+
+      };
+      /* scoped */
+      const __vue_scope_id__ = undefined;
+      /* module identifier */
+      const __vue_module_identifier__ = undefined;
+      /* functional template */
+      const __vue_is_functional_template__ = false;
+      /* component normalizer */
+      function __vue_normalize__(
+        template, style, script$$1,
+        scope, functional, moduleIdentifier,
+        createInjector, createInjectorSSR
+      ) {
+        const component = (typeof script$$1 === 'function' ? script$$1.options : script$$1) || {};
+
+        // For security concerns, we use only base name in production mode.
+        component.__file = "/Users/forzoom/repo/github/vue-project/uploader/src/uploader.vue";
+
+        if (!component.render) {
+          component.render = template.render;
+          component.staticRenderFns = template.staticRenderFns;
+          component._compiled = true;
+
+          if (functional) component.functional = true;
         }
-    }
-};
 
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+        component._scopeId = scope;
 
-"use strict";
+        {
+          let hook;
+          if (style) {
+            hook = function(context) {
+              style.call(this, createInjector(context));
+            };
+          }
 
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.previewImage = previewImage;
-exports.chooseImage = chooseImage;
-exports.uploadImage = uploadImage;
-exports.getLocalImgData = getLocalImgData;
-var isIOS = /iPhone/.test(navigator.userAgent);
-
-function previewImage(image, images) {
-    wx.previewImage({
-        current: image,
-        urls: images
-    });
-}
-
-/**
- * @return {Promise} localIds: Array<string>
- */
-function chooseImage(count) {
-    return new Promise(function (resolve, reject) {
-        wx.chooseImage({
-            count: count,
-            sizeType: ['compressed'],
-            success: function success(res) {
-                console.log('chooseImage', res);
-                return resolve(res.localIds);
+          if (hook !== undefined) {
+            if (component.functional) {
+              // register for functional component in vue file
+              const originalRender = component.render;
+              component.render = function renderWithStyleInjection(h, context) {
+                hook.call(context);
+                return originalRender(h, context)
+              };
+            } else {
+              // inject component registration as beforeCreate hook
+              const existing = component.beforeCreate;
+              component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
             }
-        });
-    });
-}
+          }
+        }
 
-/**
- * 默认不显示progress
- * @param localId
- *
- * @return {Promise} serverId
- */
-function uploadImage(localId) {
-    return new Promise(function (resolve, reject) {
-        wx.uploadImage({
-            localId: localId,
-            isShowProgressTips: 0,
-            success: function success(res) {
-                return resolve(res.serverId);
+        return component
+      }
+      /* style inject */
+      function __vue_create_injector__() {
+        const head = document.head || document.getElementsByTagName('head')[0];
+        const styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
+        const isOldIE =
+          typeof navigator !== 'undefined' &&
+          /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+        return function addStyle(id, css) {
+          if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return // SSR styles are present.
+
+          const group = isOldIE ? css.media || 'default' : id;
+          const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+          if (!style.ids.includes(id)) {
+            let code = css.source;
+            let index = style.ids.length;
+
+            style.ids.push(id);
+
+            if (isOldIE) {
+              style.element = style.element || document.querySelector('style[data-group=' + group + ']');
             }
-        });
-    });
-}
 
-/**
- * @param localId
- *
- * @return {Promise} imageData
- */
-function getLocalImgData(localId) {
-    if (!isIOS || !window.__wxjs_is_wkwebview) {
-        return localId;
-    }
-    return new Promise(function (resolve, reject) {
-        wx.getLocalImgData({
-            localId: localId,
-            success: function success(res) {
-                return resolve(res.localData);
+            if (!style.element) {
+              const el = style.element = document.createElement('style');
+              el.type = 'text/css';
+
+              if (css.media) el.setAttribute('media', css.media);
+              if (isOldIE) {
+                el.setAttribute('data-group', group);
+                el.setAttribute('data-next-index', '0');
+              }
+
+              head.appendChild(el);
             }
+
+            if (isOldIE) {
+              index = parseInt(style.element.getAttribute('data-next-index'));
+              style.element.setAttribute('data-next-index', index + 1);
+            }
+
+            if (style.element.styleSheet) {
+              style.parts.push(code);
+              style.element.styleSheet.cssText = style.parts
+                .filter(Boolean)
+                .join('\n');
+            } else {
+              const textNode = document.createTextNode(code);
+              const nodes = style.element.childNodes;
+              if (nodes[index]) style.element.removeChild(nodes[index]);
+              if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
+              else style.element.appendChild(textNode);
+            }
+          }
+        }
+      }
+      /* style inject SSR */
+      
+
+      
+      var Uploader = __vue_normalize__(
+        { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+        __vue_inject_styles__,
+        __vue_script__,
+        __vue_scope_id__,
+        __vue_is_functional_template__,
+        __vue_module_identifier__,
+        __vue_create_injector__,
+        undefined
+      );
+
+    var isIOS = /iPhone/.test(navigator.userAgent);
+    function previewImage(image, images) {
+        wx.previewImage({
+            current: image,
+            urls: images,
         });
-    });
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(5)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".ro-uploader-wrap{display:flex;background-color:#fff;text-decoration:none}.ro-uploader-wrap .ro-uploader-image-wrap{position:relative;margin-right:5px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-image{vertical-align:middle;width:70px;height:70px;background-repeat:no-repeat;background-size:cover;background-position:50%;background-color:#aaa}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove{position:absolute;width:18px;height:18px;font-size:18px;line-height:18px;color:#fff;background-color:#aaa;top:0;right:0}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{background-color:#fff;transform:translate(-50%,-50%) rotate(45deg)}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:before{width:2px;height:18px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:after{width:18px;height:2px}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active{border-color:#fff}.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:after,.ro-uploader-wrap .ro-uploader-image-wrap .ro-uploader-remove:active:before{background-color:#fff}.ro-uploader-wrap .ro-uploader-request{position:relative;width:70px;height:70px;border:1px solid #aaa;box-sizing:border-box}.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{background-color:#bbb}.ro-uploader-wrap .ro-uploader-request:before{width:2px;height:35px}.ro-uploader-wrap .ro-uploader-request:after{width:35px;height:2px}.ro-uploader-wrap .ro-uploader-request:active{border-color:#888}.ro-uploader-wrap .ro-uploader-request:active:after,.ro-uploader-wrap .ro-uploader-request:active:before{background-color:#888}.ro-uploader-wrap .ro-uploader-remove:after,.ro-uploader-wrap .ro-uploader-remove:before,.ro-uploader-wrap .ro-uploader-request:after,.ro-uploader-wrap .ro-uploader-request:before{content:\" \";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}", ""]);
-
-// exports
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// this module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
     }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
+    /**
+     * @return {Promise} res
+     *  - localIds: Array<string>
+     */
+    function chooseImage(count) {
+        return new Promise(function (resolve, reject) {
+            wx.chooseImage({
+                count: count,
+                sizeType: ['compressed'],
+                success: function (res) {
+                    return resolve(res);
+                },
+            });
+        });
     }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "ro-uploader-wrap",
-    class: _vm.containerClass,
-    style: (_vm.containerStyle)
-  }, [_vm._l((_vm.images), function(image, index) {
-    return _c('div', {
-      staticClass: "ro-uploader-image-wrap",
-      class: _vm.imageWrapClass,
-      style: (_vm.imageWrapStyle)
-    }, [(!_vm.lazyload) ? _c('div', {
-      directives: [{
-        name: "pressure-press",
-        rawName: "v-pressure-press",
-        value: (_vm.onPress(index)),
-        expression: "onPress(index)"
-      }],
-      staticClass: "ro-uploader-image",
-      class: _vm.imageClass,
-      style: ([{
-        'background-image': 'url(' + image + ')'
-      }, _vm.imageStyle]),
-      on: {
-        "click": function($event) {
-          _vm.onClickImage(index)
+    /**
+     * 默认不显示progress
+     * @param localId
+     *
+     * @return {Promise} res
+     *  - serverId
+     */
+    function uploadImage(localId) {
+        return new Promise(function (resolve, reject) {
+            wx.uploadImage({
+                localId: localId,
+                isShowProgressTips: 0,
+                success: function (res) {
+                    return resolve(res);
+                },
+            });
+        });
+    }
+    /**
+     * @param localId
+     *
+     * @return {Promise} imageData
+     */
+    function getLocalImgData(localId) {
+        if (!isIOS || !window.__wxjs_is_wkwebview) {
+            return localId;
         }
-      }
-    }) : _c('div', {
-      directives: [{
-        name: "lazy",
-        rawName: "v-lazy:background-image",
-        value: (image),
-        expression: "image",
-        arg: "background-image"
-      }, {
-        name: "pressure-press",
-        rawName: "v-pressure-press",
-        value: (_vm.onPress(index)),
-        expression: "onPress(index)"
-      }],
-      staticClass: "ro-uploader-image",
-      class: _vm.imageClass,
-      style: ([_vm.imageStyle]),
-      on: {
-        "click": function($event) {
-          _vm.onClickImage(index)
-        }
-      }
-    }), _vm._v(" "), (_vm.canModify) ? _c('div', {
-      staticClass: "ro-uploader-remove",
-      class: _vm.removeClass,
-      style: (_vm.removeStyle),
-      on: {
-        "click": function($event) {
-          _vm.onClickRemove(index)
-        }
-      }
-    }) : _vm._e()])
-  }), _vm._v(" "), (_vm.images.length < _vm.size && _vm.canModify) ? _c('div', {
-    staticClass: "ro-uploader-image-wrap ro-uploader-request",
-    class: _vm.requestClass,
-    style: (_vm.requestStyle),
-    on: {
-      "click": _vm.onClickRequest
+        return new Promise(function (resolve, reject) {
+            wx.getLocalImgData({
+                localId: localId,
+                success: function (res) {
+                    return resolve(res.localData);
+                },
+            });
+        });
     }
-  }) : _vm._e()], 2)
-},staticRenderFns: []}
 
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(4);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(9)("4fb8864b", content, true);
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(10)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
+    /**
+     *
+     *
+     * @return {Promise} {image, serverId}
+     */
+    function uploadWechatImage(localId) {
+        var serverId = null;
+        return uploadImage(localId).then(function (_res) {
+            serverId = _res.serverId; // 记录res
+            return localId;
+        })
+            .then(getLocalImgData) // 权限检测可能不应该这样使用
+            .then(function (imageData) {
+            return {
+                image: imageData,
+                serverId: serverId,
+            };
+        });
     }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
+    /**
+     *
+     */
+    var wechatUploader = {
+        name: 'WechatUploader',
+        extends: Uploader,
+        props: {
+            /**
+             * 是否使用微信的预览内容
+             */
+            useWechatPreview: {
+                type: Boolean,
+                default: true,
+            },
+        },
+        methods: {
+            /**
+             * 要求添加新的图片
+             */
+            onClickRequest: function () {
+                this.request();
+            },
+            /**
+             * 请求图片上传
+             */
+            request: function () {
+                var vm = this;
+                return chooseImage(vm.size - vm.images.length)
+                    .then(function (res) {
+                    var localIds = res.localIds;
+                    if (localIds.length > 0) {
+                        vm.$emit('choose', res);
+                        vm.$emit('load');
+                        return vm.uploadWechatImages(localIds).then(function () {
+                            vm.$emit('finish');
+                        });
+                    }
+                });
+            },
+            /**
+             * 上传多张图片，需要保证一张上传完成之后，再上传另外一张
+             */
+            uploadWechatImages: function (localIds) {
+                var vm = this;
+                var localId = localIds.shift();
+                return uploadWechatImage(localId)
+                    .then(function (_a) {
+                    var image = _a.image, serverId = _a.serverId, res = _a.res;
+                    vm.add({ image: image, serverId: serverId });
+                    if (localIds.length > 0) {
+                        return vm.uploadWechatImages(localIds);
+                    }
+                });
+            },
+        },
+        mounted: function () {
+            this.$on('click', function (index) {
+                previewImage(this.images[index].image, this.images.map(function (image) { return image.image; }));
+            });
+        },
+    };
 
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
+    exports.Uploader = Uploader;
+    exports.WechatUploader = wechatUploader;
 
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
+    Object.defineProperty(exports, '__esModule', { value: true });
 
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_uploader_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_uploader_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__src_uploader_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js__);
-/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "Uploader", function() { return __WEBPACK_IMPORTED_MODULE_0__src_uploader_vue___default.a; });
-/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "WechatUploader", function() { return __WEBPACK_IMPORTED_MODULE_1__src_wechat_uploader_js___default.a; });
-
-
-
-
-/***/ })
-/******/ ]);
-});
+})));
