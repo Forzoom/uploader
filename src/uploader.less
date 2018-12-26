@@ -1,0 +1,95 @@
+@color-white: #ffffff;
+
+@border-color: #bbbbbb;
+@active-border-color: darken(@border-color, 20%);
+@size: 70px;
+@border-width: 1px;
+
+@remove-button-size: 18px;
+
+.ro-uploader-wrap {
+    display: flex;
+    background-color: #ffffff;
+    text-decoration: none;
+    .ro-uploader-image-wrap {
+        position: relative;
+        margin-right: 5px;
+        .ro-uploader-image {
+            vertical-align: middle;
+            width: @size;
+            height: @size;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-color: #aaaaaa;
+        }
+        .ro-uploader-remove {
+            position: absolute;
+            width: @remove-button-size;
+            height: @remove-button-size;
+            font-size: @remove-button-size;
+            line-height: @remove-button-size;
+            color: #ffffff;
+            background-color: #aaaaaa;
+            top: 0rem;
+            right: 0rem;
+            &:before,
+            &:after {
+                background-color: @color-white;
+                transform: translate(-50%, -50%) rotateZ(45deg);
+            }
+            &:before {
+                width: @border-width + 1;
+                height: @remove-button-size;
+            }
+            &:after {
+                width: @remove-button-size;
+                height: @border-width + 1;
+            }
+            &:active {
+                border-color: @color-white;
+                &:before,
+                &:after {
+                    background-color: @color-white;
+                }
+            }
+        }
+    }
+    .ro-uploader-request {
+        position: relative;
+        width: @size;
+        height: @size;
+        border: @border-width solid #aaaaaa;
+        box-sizing: border-box;
+        &:before,
+        &:after {
+            background-color: @border-color;
+        }
+        &:before {
+            width: @border-width + 1;
+            height: @size / 2;
+        }
+        &:after {
+            width: @size / 2;
+            height: @border-width + 1;
+        }
+        &:active {
+            border-color: @active-border-color;
+            &:before,
+            &:after {
+                background-color: @active-border-color;
+            }
+        }
+    }
+    .ro-uploader-remove,
+    .ro-uploader-request {
+        &:before,
+        &:after {
+            content: " ";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}

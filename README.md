@@ -103,24 +103,24 @@ export default {
 __html__
 
 ```html
-	<!-- size="4": 显示多少个图片 -->
-	<!-- can-modify="false": 不允许修改，只允许查看 -->
-	<WechatUploader
-		ref="uploader"
-		:size="4"
-		:can-modify="true">
-	</WechatUploader>
+<!-- size="4": 显示多少个图片 -->
+<!-- can-modify="false": 不允许修改，只允许查看 -->
+<WechatUploader
+	ref="uploader"
+	:size="4"
+	:can-modify="true">
+</WechatUploader>
 ```
 
 __script__
 
 ```javascript
-	this.$refs.uploader.setImages([
-		{
-			image: '...', // 可以是url或者localId
-			serverId: '...', // 可以不传入
-		},
-	]);
+this.$refs.uploader.setImages([
+	{
+		image: '...', // 可以是url或者localId
+		serverId: '...', // 可以不传入
+	},
+]);
 ```
 
 ###### WechatUploader.getImages
@@ -128,15 +128,24 @@ __script__
 获得uploader中当前的图片内容
 
 ```javascript
-	const images = this.$refs.uploader.getImages();
+const images = this.$refs.uploader.getImages();
 
-	// 结果是
-	[
-		{
-			image: '...',
-			serverId: '...',
-		},
-	]
+// 结果是
+[
+	{
+		image: '...',
+		serverId: '...',
+	},
+]
+```
+
+### Types
+
+```
+// 表示<Uploader>组件的interface
+export interface UploaderComponent {..}
+// 表示<WechatUploader>组件的interface
+export interface WechatUploaderComponent {..}
 ```
 
 ### Roadmap

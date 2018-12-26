@@ -4,14 +4,19 @@
         "module": "esnext",
         "baseUrl": ".",
         "moduleResolution": "node",
+        "esModuleInterop": true,
         "lib": [
             "dom",
-            "es5",
+            "dom.iterable",
             "scripthost",
+            "es5",
             "es2015",
             "es6",
             "es2016",
             "esnext",
+        ],
+        "types": [
+            "wx-js-sdk-dt"
         ]
     },
     "include": [

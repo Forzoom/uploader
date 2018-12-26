@@ -1,6 +1,6 @@
 const typescript = require('rollup-plugin-typescript');
-const vue = require('rollup-plugin-vue').default;
 const { uglify } = require('rollup-plugin-uglify');
+const babel = require('rollup-plugin-babel');
 
 module.exports = exports = [
     {
@@ -11,7 +11,6 @@ module.exports = exports = [
         },
         plugins: [
             typescript(),
-            vue(),
         ],
     },
     {
@@ -22,7 +21,6 @@ module.exports = exports = [
         },
         plugins: [
             typescript(),
-            vue(),
         ],
     },
     {
@@ -34,7 +32,6 @@ module.exports = exports = [
         },
         plugins: [
             typescript(),
-            vue(),
         ],
     },
     {
@@ -46,7 +43,6 @@ module.exports = exports = [
         },
         plugins: [
             typescript(),
-            vue(),
             uglify(),
         ],
     },

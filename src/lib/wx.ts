@@ -1,6 +1,15 @@
 const isIOS = /iPhone/.test(navigator.userAgent);
 
-export function previewImage(image, images) {
+declare global {
+    interface Window {
+        /**
+         * 判定iOS设备上使用的webview内核， iOS微信6.5.3及其之后的版本 window.wxjs_is_wkwebview 为true时是使用WKWebview，为 false或者 “undefine”时是 UIWebview
+         */
+        __wxjs_is_wkwebview?: boolean;
+    }
+}
+
+export function previewImage(image: string, images: string[]) {
     wx.previewImage({
         current: image,
         urls: images,
@@ -9,10 +18,10 @@ export function previewImage(image, images) {
 
 /**
  * @return {Promise} res
- *  - localIds: Array<string>
+ *  - localIds: string[]
  */
-export function chooseImage(count) {
-    return new Promise(function(resolve, reject) {
+export function chooseImage(count: number) {
+    return new Promise<{ localIds: string[] }>(function(resolve, reject) {
         wx.chooseImage({
             count,
             sizeType: ['compressed'],
@@ -30,8 +39,8 @@ export function chooseImage(count) {
  * @return {Promise} res
  *  - serverId
  */
-export function uploadImage(localId) {
-    return new Promise(function(resolve, reject) {
+export function uploadImage(localId: string) {
+    return new Promise<{ serverId: string }>(function(resolve, reject) {
         wx.uploadImage({
             localId,
             isShowProgressTips: 0,
@@ -47,11 +56,11 @@ export function uploadImage(localId) {
  *
  * @return {Promise} imageData
  */
-export function getLocalImgData(localId) {
+export function getLocalImgData(localId: string) {
     if (!isIOS || !window.__wxjs_is_wkwebview) {
         return localId;
     }
-    return new Promise(function(resolve, reject) {
+    return new Promise<string>(function(resolve, reject) {
         wx.getLocalImgData({
             localId,
             success(res) {
