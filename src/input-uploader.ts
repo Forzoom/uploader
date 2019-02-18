@@ -2,6 +2,7 @@ import Vue from 'vue';
 import {
     UploaderData,
     UploaderOptions,
+    FileImage,
 } from '../types/index';
 import {
     header,
@@ -18,7 +19,7 @@ function noop<T>(_: T) {
  */
 export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
     const Uploader = UploaderFactory(_Vue);
-    return Uploader.extend<UploaderData<File>, {}, {}, {}>({
+    return Uploader.extend<UploaderData<FileImage>, {}, {}, {}>({
         name: 'InputUploader',
         methods: {
             /**
@@ -38,9 +39,46 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                     $input.click();
                 }
             },
+            /**
+             * 删除图片
+             *  将触发@remove(index)事件
+             *
+             * @param {number} index
+             *
+             * @return {boolean} true表示删除成功，false表示失败
+             */
+            remove: function(index) {
+                if (0 <= index && index < this.size) {
+                    var removed = this.images.splice(index, 1);
+                    console.log(removed);
+                    this.$emit('remove', index);
+                    return true;
+                }
+                return false;
+            },
+            onChangeInput: function() {
+                var $input = this.$refs.fileInput as HTMLInputElement;
+                if ($input) {
+                    for (var i = 0, len = $input.files.length; i < len; i++) {
+                        if (this.images.length >= this.size) {
+                            return;
+                        }
+                        this.add({
+                            file: $input.files[i],
+                            objectUrl: URL.createObjectURL($input.files[i]),
+                        });
+                    }
+                }
+            },
+            /**
+             * 获取image
+             */
+            transformImage: function(image: FileImage) {
+                return image.objectUrl;
+            },
         },
         template: header
-            + '<input ref="fileInput" class="ro-uploader-input" type="file" :multiple="(size - images.length) > 1" />'
+            + '<input ref="fileInput" class="ro-uploader-input" type="file" @change="onChangeInput" :multiple="(size - images.length) > 1" />'
             + footer,
     })
 }
