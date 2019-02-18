@@ -50,7 +50,9 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
             remove: function(index) {
                 if (0 <= index && index < this.size) {
                     var removed = this.images.splice(index, 1);
-                    console.log(removed);
+                    for (var i = 0, len = removed.length; i < len; i++) {
+                        URL.revokeObjectURL(removed[i].objectUrl);
+                    }
                     this.$emit('remove', index);
                     return true;
                 }
