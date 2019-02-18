@@ -431,9 +431,11 @@ function factory$2(_Vue, options) {
                 }
             },
         },
-        template: '<Uploader><div slot="extra">'
+        template: '<Uploader>'
+            + '<div slot="extra">'
             + '<input ref="fileInput" class="input" type="file" />'
-            + '</div><Uploader>',
+            + '</div>'
+            + '</Uploader>',
     });
 }
 

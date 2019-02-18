@@ -34,8 +34,10 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 }
             },
         },
-        template: '<Uploader><div slot="extra">'
+        template: '<Uploader>'
+            + '<div slot="extra">'
             + '<input ref="fileInput" class="input" type="file" />'
-            + '</div><Uploader>',
+            + '</div>'
+            + '</Uploader>',
     })
 }
