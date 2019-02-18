@@ -230,6 +230,7 @@
                 }
             },
             template: '<div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">'
+                + '<slot name="extra"></slot>'
                 + '<div v-for="(image, index) in images" '
                 + ':key="index"'
                 + 'class="ro-uploader-image-wrap"'

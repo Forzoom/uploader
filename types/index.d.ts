@@ -107,6 +107,8 @@ export interface UploaderOptions {
 
 export type UploaderComponnet = CombinedVueInstance<Vue, UploaderData<string>, UploaderMethod<string>, object, UploaderProp>;
 export type WechatUploaderComponent = CombinedVueInstance<Vue, UploaderData<WechatImage>, UploaderMethod<WechatImage> & WechatUploaderMethod, object, UploaderProp & WechatUploaderProp>;
+export type InputUploaderComponent = CombinedVueInstance<Vue, UploaderData<File>, UploaderMethod<File>, object, UploaderProp>;
 export const Uploader: UploaderComponnet;
 export const WechatUploader: WechatUploaderComponent;
+export const InputUploader: InputUploaderComponent;
 export declare function install(vue: typeof Vue, options: UploaderOptions): void;
