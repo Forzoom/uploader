@@ -407,6 +407,36 @@ function factory$1(_Vue, options) {
     });
 }
 
+/**
+ *
+ */
+function factory$2(_Vue, options) {
+    var Uploader = factory(_Vue);
+    return Uploader.extend({
+        name: 'InputUploader',
+        methods: {
+            /**
+             * 要求添加新的图片
+             */
+            onClickRequest: function () {
+                this.request();
+            },
+            /**
+             * 请求图片上传
+             */
+            request: function () {
+                var $input = this.$refs.fileInput;
+                if ($input) {
+                    $input.click();
+                }
+            },
+        },
+        template: '<Uploader><div slot="extra">'
+            + '<input ref="fileInput" class="input" type="file" />'
+            + '</div><Uploader>',
+    });
+}
+
 var installed = false;
 function install(vue, options) {
     if (installed) {
@@ -415,6 +445,7 @@ function install(vue, options) {
     installed = true;
     vue.component('Uploader', factory(vue));
     vue.component('WechatUploader', factory$1(vue, options));
+    vue.component('InputUploader', factory$2(vue, options));
 }
 
 export default install;
