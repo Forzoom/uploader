@@ -3,6 +3,10 @@ import {
     UploaderData,
     UploaderOptions,
 } from '../types/index';
+import {
+    header,
+    footer,
+} from './lib/constant';
 import UploaderFactory from './uploader';
 
 function noop<T>(_: T) {
@@ -29,15 +33,14 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
             request: function() {
                 var vm = this;
                 var $input = this.$refs.fileInput;
+                console.log(this.$refs);
                 if ($input) {
                     $input.click();
                 }
             },
         },
-        template: '<Uploader>'
-            + '<div slot="extra">'
-            + '<input ref="fileInput" class="input" type="file" />'
-            + '</div>'
-            + '</Uploader>',
+        template: header
+            + '<input ref="fileInput" class="ro-uploader-input" type="file" :multiple="(size - images.length) > 1" />'
+            + footer,
     })
 }

@@ -4,6 +4,37 @@
     (global.Uploader = factory());
 }(this, (function () { 'use strict';
 
+    var header = '<div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">';
+    var footer = '<div v-for="(image, index) in images" '
+        + ':key="index"'
+        + 'class="ro-uploader-image-wrap"'
+        + ':class="imageWrapClass"'
+        + ':style="imageWrapStyle">'
+        + '<div v-if="!lazyload" '
+        + 'class="ro-uploader-image"'
+        + ':class="imageClass"'
+        + ':style="[{\'background-image\': \'url(\' + transformImage(image) + \')\'}, imageStyle]"'
+        + '@click="onClickImage(index)">'
+        + '</div>'
+        + '<div v-else '
+        + 'class="ro-uploader-image"'
+        + ':class="imageClass"'
+        + 'v-lazy:background-image="image"'
+        + ':style="[imageStyle]"'
+        + '@click="onClickImage(index)">'
+        + '</div>'
+        + '<div v-if="canModify" class="ro-uploader-remove" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"></div>'
+        + '</div>'
+        + '<slot name="request">'
+        + '<div class="ro-uploader-image-wrap ro-uploader-request" '
+        + 'v-if="images.length < size && canModify"'
+        + '@click="onClickRequest"'
+        + ':class="requestClass"'
+        + ':style="requestStyle">'
+        + '</div>'
+        + '</slot>'
+        + '</div>';
+
     /**
      * @load 当图片上传开始时
      * @finish 当图片上传结束时
@@ -229,37 +260,7 @@
                     return image;
                 }
             },
-            template: '<div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">'
-                + '<slot name="extra"></slot>'
-                + '<div v-for="(image, index) in images" '
-                + ':key="index"'
-                + 'class="ro-uploader-image-wrap"'
-                + ':class="imageWrapClass"'
-                + ':style="imageWrapStyle">'
-                + '<div v-if="!lazyload" '
-                + 'class="ro-uploader-image"'
-                + ':class="imageClass"'
-                + ':style="[{\'background-image\': \'url(\' + transformImage(image) + \')\'}, imageStyle]"'
-                + '@click="onClickImage(index)">'
-                + '</div>'
-                + '<div v-else '
-                + 'class="ro-uploader-image"'
-                + ':class="imageClass"'
-                + 'v-lazy:background-image="image"'
-                + ':style="[imageStyle]"'
-                + '@click="onClickImage(index)">'
-                + '</div>'
-                + '<div v-if="canModify" class="ro-uploader-remove" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"></div>'
-                + '</div>'
-                + '<slot name="request">'
-                + '<div class="ro-uploader-image-wrap ro-uploader-request" '
-                + 'v-if="images.length < size && canModify"'
-                + '@click="onClickRequest"'
-                + ':class="requestClass"'
-                + ':style="requestStyle">'
-                + '</div>'
-                + '</slot>'
-                + '</div>',
+            template: header + footer,
         });
     }
 
@@ -432,16 +433,15 @@
                  */
                 request: function () {
                     var $input = this.$refs.fileInput;
+                    console.log(this.$refs);
                     if ($input) {
                         $input.click();
                     }
                 },
             },
-            template: '<Uploader>'
-                + '<div slot="extra">'
-                + '<input ref="fileInput" class="input" type="file" />'
-                + '</div>'
-                + '</Uploader>',
+            template: header
+                + '<input ref="fileInput" class="ro-uploader-input" type="file" :multiple="(size - images.length) > 1" />'
+                + footer,
         });
     }
 
