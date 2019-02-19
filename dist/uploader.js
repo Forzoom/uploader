@@ -4,6 +4,37 @@
     (global.Uploader = factory());
 }(this, (function () { 'use strict';
 
+    var header = '<div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">';
+    var footer = '<div v-for="(image, index) in images" '
+        + ':key="index"'
+        + 'class="ro-uploader-image-wrap"'
+        + ':class="imageWrapClass"'
+        + ':style="imageWrapStyle">'
+        + '<div v-if="!lazyload" '
+        + 'class="ro-uploader-image"'
+        + ':class="imageClass"'
+        + ':style="[{\'background-image\': \'url(\' + transformImage(image) + \')\'}, imageStyle]"'
+        + '@click="onClickImage(index)">'
+        + '</div>'
+        + '<div v-else '
+        + 'class="ro-uploader-image"'
+        + ':class="imageClass"'
+        + 'v-lazy:background-image="image"'
+        + ':style="[imageStyle]"'
+        + '@click="onClickImage(index)">'
+        + '</div>'
+        + '<div v-if="canModify" class="ro-uploader-remove" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"></div>'
+        + '</div>'
+        + '<slot name="request">'
+        + '<div class="ro-uploader-image-wrap ro-uploader-request" '
+        + 'v-if="images.length < size && canModify"'
+        + '@click="onClickRequest"'
+        + ':class="requestClass"'
+        + ':style="requestStyle">'
+        + '</div>'
+        + '</slot>'
+        + '</div>';
+
     /**
      * @load 当图片上传开始时
      * @finish 当图片上传结束时
@@ -229,36 +260,7 @@
                     return image;
                 }
             },
-            template: '<div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">'
-                + '<div v-for="(image, index) in images" '
-                + ':key="index"'
-                + 'class="ro-uploader-image-wrap"'
-                + ':class="imageWrapClass"'
-                + ':style="imageWrapStyle">'
-                + '<div v-if="!lazyload" '
-                + 'class="ro-uploader-image"'
-                + ':class="imageClass"'
-                + ':style="[{\'background-image\': \'url(\' + transformImage(image) + \')\'}, imageStyle]"'
-                + '@click="onClickImage(index)">'
-                + '</div>'
-                + '<div v-else '
-                + 'class="ro-uploader-image"'
-                + ':class="imageClass"'
-                + 'v-lazy:background-image="image"'
-                + ':style="[imageStyle]"'
-                + '@click="onClickImage(index)">'
-                + '</div>'
-                + '<div v-if="canModify" class="ro-uploader-remove" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"></div>'
-                + '</div>'
-                + '<slot name="request">'
-                + '<div class="ro-uploader-image-wrap ro-uploader-request" '
-                + 'v-if="images.length < size && canModify"'
-                + '@click="onClickRequest"'
-                + ':class="requestClass"'
-                + ':style="requestStyle">'
-                + '</div>'
-                + '</slot>'
-                + '</div>',
+            template: header + footer,
         });
     }
 
@@ -412,6 +414,76 @@
         });
     }
 
+    /**
+     *
+     */
+    function factory$2(_Vue, options) {
+        var Uploader = factory(_Vue);
+        return Uploader.extend({
+            name: 'InputUploader',
+            methods: {
+                /**
+                 * 要求添加新的图片
+                 */
+                onClickRequest: function () {
+                    this.request();
+                },
+                /**
+                 * 请求图片上传
+                 */
+                request: function () {
+                    var $input = this.$refs.fileInput;
+                    console.log(this.$refs);
+                    if ($input) {
+                        $input.click();
+                    }
+                },
+                /**
+                 * 删除图片
+                 *  将触发@remove(index)事件
+                 *
+                 * @param {number} index
+                 *
+                 * @return {boolean} true表示删除成功，false表示失败
+                 */
+                remove: function (index) {
+                    if (0 <= index && index < this.size) {
+                        var removed = this.images.splice(index, 1);
+                        for (var i = 0, len = removed.length; i < len; i++) {
+                            URL.revokeObjectURL(removed[i].objectUrl);
+                        }
+                        this.$emit('remove', index);
+                        return true;
+                    }
+                    return false;
+                },
+                onChangeInput: function () {
+                    var $input = this.$refs.fileInput;
+                    if ($input) {
+                        for (var i = 0, len = $input.files.length; i < len; i++) {
+                            if (this.images.length >= this.size) {
+                                return;
+                            }
+                            this.add({
+                                file: $input.files[i],
+                                objectUrl: URL.createObjectURL($input.files[i]),
+                            });
+                        }
+                    }
+                },
+                /**
+                 * 获取image
+                 */
+                transformImage: function (image) {
+                    return image.objectUrl;
+                },
+            },
+            template: header
+                + '<input ref="fileInput" class="ro-uploader-input" type="file" @change="onChangeInput" :multiple="(size - images.length) > 1" />'
+                + footer,
+        });
+    }
+
     var installed = false;
     function install(vue, options) {
         if (installed) {
@@ -420,6 +492,7 @@
         installed = true;
         vue.component('Uploader', factory(vue));
         vue.component('WechatUploader', factory$1(vue, options));
+        vue.component('InputUploader', factory$2(vue, options));
     }
 
     return install;
