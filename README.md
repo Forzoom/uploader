@@ -2,7 +2,22 @@
 
 npm install @forzoom/uploader
 
+### Desc
+
+提供三种组件
+1. Uploader
+2. WechatUploader
+3. InputUploader
+
 ### Usage
+
+```
+import Vue from 'vue';
+import Uploader from '@forzoom/uploader';
+Vue.use(Uploader, {
+	.. // 额外配置
+})
+```
 
 #### WechatUploader
 
@@ -146,6 +161,8 @@ const images = this.$refs.uploader.getImages();
 export interface UploaderComponent {..}
 // 表示<WechatUploader>组件的interface
 export interface WechatUploaderComponent {..}
+// 
+export interface InputUploaderComponent {..}
 ```
 
 ### Roadmap
