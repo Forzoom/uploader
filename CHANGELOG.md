@@ -123,3 +123,7 @@
 #### 0.1.4
 
 1. 添加InputUploader组件
+
+#### 0.1.5
+
+1. (break)修改remove按钮的html结构
