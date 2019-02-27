@@ -29,16 +29,20 @@
             background-position: center;
             background-color: #aaaaaa;
         }
-        .ro-uploader-remove {
+        .remove-wrapper {
             position: absolute;
+            width: @remove-button-size;
+            height: @remove-button-size;
+            top: 0;
+            right: 0;
+        }
+        .ro-uploader-remove {
             width: @remove-button-size;
             height: @remove-button-size;
             font-size: @remove-button-size;
             line-height: @remove-button-size;
             color: #ffffff;
             background-color: #aaaaaa;
-            top: 0rem;
-            right: 0rem;
             &:before,
             &:after {
                 background-color: @color-white;
