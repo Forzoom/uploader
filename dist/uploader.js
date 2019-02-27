@@ -23,7 +23,7 @@
         + ':style="[imageStyle]"'
         + '@click="onClickImage(index)">'
         + '</div>'
-        + '<div v-if="canModify" class="ro-uploader-remove" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"></div>'
+        + '<div v-if="canModify" class="remove-wrapper" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"><div class="ro-uploader-remove"></div></div>'
         + '</div>'
         + '<slot name="request">'
         + '<div class="ro-uploader-image-wrap ro-uploader-request" '
