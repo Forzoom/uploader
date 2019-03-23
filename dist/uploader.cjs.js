@@ -279,6 +279,14 @@ function chooseImage(count) {
             success: function (res) {
                 return resolve(res);
             },
+            // @ts-ignore
+            cancel: function () {
+                return reject(new Error('cancel'));
+            },
+            // @ts-ignore
+            fail: function () {
+                return reject(new Error('fail'));
+            },
         });
     });
 }
@@ -383,6 +391,8 @@ function factory$1(_Vue, options) {
                             vm.$emit('finish');
                         });
                     }
+                }).catch(function () {
+                    vm.$emit('endRequest');
                 });
             },
             /**

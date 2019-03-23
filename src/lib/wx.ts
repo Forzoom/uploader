@@ -28,6 +28,14 @@ export function chooseImage(count: number) {
             success: function(res) {
                 return resolve(res);
             },
+            // @ts-ignore
+            cancel: function() {
+                return reject(new Error('cancel'));
+            },
+            // @ts-ignore
+            fail: function() {
+                return reject(new Error('fail'));
+            },
         });
     });
 }
