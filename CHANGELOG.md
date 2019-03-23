@@ -127,3 +127,7 @@
 #### 0.1.5
 
 1. (break)修改remove按钮的html结构
+
+#### 0.1.6
+
+1. wechatUploader添加startRequest和endRequest事件

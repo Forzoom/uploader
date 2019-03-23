@@ -254,7 +254,7 @@
                     return this.images.length;
                 },
                 /**
-                 * 获取image
+                 * 获取image，在模板中使用
                  */
                 transformImage: function (image) {
                     return image;
@@ -375,8 +375,10 @@
                  */
                 request: function () {
                     var vm = this;
+                    vm.$emit('startRequest');
                     return chooseImage(vm.size - vm.images.length)
                         .then(function (res) {
+                        vm.$emit('endRequest');
                         var localIds = res.localIds;
                         if (localIds.length > 0) {
                             vm.$emit('choose', res);

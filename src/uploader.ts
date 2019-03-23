@@ -226,7 +226,7 @@ export default function factory(_Vue: typeof Vue) {
                 return this.images.length;
             },
             /**
-             * 获取image
+             * 获取image，在模板中使用
              */
             transformImage: function(image) {
                 return image;

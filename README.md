@@ -65,6 +65,8 @@ __根据需要，可以使用Props中的样式内容修改不同元素的样式_
 |remove|index (被删除图片位置)|有图片被删除|
 |click|index (被点击图片位置)|当正在显示的图片被点击|
 |choose|sourceType|图片来源|
+|startRequest|无|request开始|
+|endRequest|无|request结束|
 
 ###### load
 

@@ -66,8 +66,10 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
              */
             request: function() {
                 var vm = this;
+                vm.$emit('startRequest')
                 return chooseImage(vm.size - vm.images.length)
                     .then((res) => {
+                        vm.$emit('endRequest');
                         var localIds = res.localIds;
                         if (localIds.length > 0) {
                             vm.$emit('choose', res);
@@ -85,12 +87,12 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 var vm = this;
                 var localId = localIds.shift();
                 return uploadWechatImage(localId, options.transformWXLocalImageData)
-                .then(function({ image, serverId, }) {
-                    vm.add({image, serverId});
-                    if (localIds.length > 0) {
-                        return vm.uploadWechatImages(localIds);
-                    }
-                });
+                    .then(function({ image, serverId, }) {
+                        vm.add({ image, serverId });
+                        if (localIds.length > 0) {
+                            return vm.uploadWechatImages(localIds);
+                        }
+                    });
             },
             transformImage: function(image) {
                 return image.image;
