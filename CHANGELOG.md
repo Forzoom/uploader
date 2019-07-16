@@ -131,3 +131,7 @@
 #### 0.1.6
 
 1. wechatUploader添加startRequest和endRequest事件
+
+#### 0.1.7
+
+1. FileImage.file允许为空

@@ -93,7 +93,7 @@ export interface WechatImage {
  */
 export interface FileImage {
     /** file文件 */
-    file: File;
+    file?: File;
     /** 由file转换成的objectURL对象 */
     objectUrl: string;
 }
