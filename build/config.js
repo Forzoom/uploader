@@ -1,6 +1,7 @@
-const typescript = require('rollup-plugin-typescript');
-const { uglify } = require('rollup-plugin-uglify');
 const babel = require('rollup-plugin-babel');
+const commonjs = require('rollup-plugin-commonjs');
+const resolve = require('rollup-plugin-node-resolve');
+const extensions = [ '.ts', '.js' ];
 
 module.exports = exports = [
     {
@@ -10,7 +11,13 @@ module.exports = exports = [
             format: 'esm',
         },
         plugins: [
-            typescript(),
+            resolve({
+                extensions,
+            }),
+            commonjs(),
+            babel({
+                extensions,
+            }),
         ],
     },
     {
@@ -20,7 +27,13 @@ module.exports = exports = [
             format: 'cjs',
         },
         plugins: [
-            typescript(),
+            resolve({
+                extensions,
+            }),
+            commonjs(),
+            babel({
+                extensions,
+            }),
         ],
     },
     {
@@ -31,19 +44,13 @@ module.exports = exports = [
             format: 'umd',
         },
         plugins: [
-            typescript(),
-        ],
-    },
-    {
-        input: './src/index.ts',
-        output: {
-            file: './dist/uploader.min.js',
-            name: 'Uploader',
-            format: 'umd',
-        },
-        plugins: [
-            typescript(),
-            uglify(),
+            resolve({
+                extensions,
+            }),
+            commonjs(),
+            babel({
+                extensions,
+            }),
         ],
     },
 ];

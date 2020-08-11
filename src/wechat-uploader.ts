@@ -27,13 +27,11 @@ function uploadWechatImage(localId: string, transformLocalImageData: boolean) {
         serverId = _res.serverId; // 记录res
         return localId;
     })
-    .then((value) => {
-        return transformLocalImageData ? getLocalImgData(value) : noop<string>(value)
-    }) // 权限检测可能不应该这样使用
-    .then((imageData) => {
+    .then(async (localId) => {
         return {
-            image: imageData,
+            image: localId,
             serverId: serverId,
+            base64: await getLocalImgData(localId),
         }
     });
 }
@@ -89,20 +87,23 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 var vm = this;
                 var localId = localIds.shift();
                 return uploadWechatImage(localId, options.transformWXLocalImageData)
-                    .then(function({ image, serverId, }) {
-                        vm.add({ image, serverId });
+                    .then(function({ image, serverId, base64 }) {
+                        vm.add({ image, serverId, base64 });
                         if (localIds.length > 0) {
+                            console.log('target13', vm.uploadWechatImages(localIds));
                             return vm.uploadWechatImages(localIds);
                         }
                     });
             },
             transformImage: function(image) {
-                return image.image;
+                console.log('target12', image);
+                return image.base64 ? image.base64 : image.image;
             },
         },
         mounted: function() {
             this.$on('click', function(index) {
-                previewImage(this.images[index].image, this.images.map(image => image.image));
+                const images = this.images as WechatImage[];
+                previewImage(images[index].image, images.map(image => image.image));
             });
         },
     })

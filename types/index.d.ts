@@ -87,6 +87,7 @@ export interface UploaderMethod<ImageType> {
 export interface WechatImage {
     serverId?: string | null;
     image: string;
+    base64?: string;
 }
 /**
  * InputUploader中所存储的内容
@@ -115,7 +116,7 @@ export interface UploaderOptions {
 }
 
 export type UploaderComponnet = CombinedVueInstance<Vue, UploaderData<string>, UploaderMethod<string>, object, UploaderProp>;
-export type WechatUploaderComponent = CombinedVueInstance<Vue, UploaderData<WechatImage>, UploaderMethod<WechatImage> & WechatUploaderMethod, object, UploaderProp & WechatUploaderProp>;
+export type WechatUploaderComponent<T extends WechatImage = WechatImage> = CombinedVueInstance<Vue, UploaderData<T>, UploaderMethod<T> & WechatUploaderMethod, object, UploaderProp & WechatUploaderProp>;
 export type InputUploaderComponent = CombinedVueInstance<Vue, UploaderData<FileImage>, UploaderMethod<FileImage>, object, UploaderProp>;
 export const Uploader: UploaderComponnet;
 export const WechatUploader: WechatUploaderComponent;

@@ -1,6 +1,6 @@
 {
   "name": "@forzoom/uploader",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "uploader component",
   "main": "dist/uploader.min.js",
   "module": "dist/uploader.esm.js",
@@ -20,21 +20,24 @@
   },
   "homepage": "https://github.com/Forzoom/uploader#readme",
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/wx-js-sdk-dt": "^1.2.5",
     "jasmine": "^2.6.0",
     "karma": "^1.7.0",
     "karma-jasmine": "^1.1.0",
     "less": "^2.7.2",
-    "rollup": "^0.67.3",
+    "rollup": "^2.23.1",
+    "rollup-plugin-babel": "^4.1.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript": "^1.0.0",
     "rollup-plugin-uglify": "^6.0.0",
-    "rollup-plugin-vue": "^4.3.2",
     "tslib": "^1.9.3",
     "typescript": "^3.2.2",
-    "vue": "^2.5.17",
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.0",
-    "@types/wx-js-sdk-dt": "^1.2.5",
-    "rollup-plugin-babel": "^4.1.0"
+    "vue": "^2.5.17"
   },
-  "types": "./types/index.d.ts"
+  "types": "./types/index.d.ts",
+  "dependencies": {}
 }

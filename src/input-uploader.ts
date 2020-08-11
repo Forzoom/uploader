@@ -21,6 +21,11 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
     const Uploader = UploaderFactory(_Vue);
     return Uploader.extend<UploaderData<FileImage>, {}, {}, {}>({
         name: 'InputUploader',
+        props: {
+            accept: {
+                type: String,
+            },
+        },
         methods: {
             /**
              * 要求添加新的图片
@@ -32,9 +37,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
              * 请求图片上传
              */
             request: function() {
-                var vm = this;
                 var $input = this.$refs.fileInput;
-                console.log(this.$refs);
                 if ($input) {
                     $input.click();
                 }
@@ -80,7 +83,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
             },
         },
         template: header
-            + '<input ref="fileInput" class="ro-uploader-input" type="file" @change="onChangeInput" :multiple="(size - images.length) > 1" />'
+            + '<input ref="fileInput" class="ro-uploader-input" type="file" @change="onChangeInput" :multiple="(size - images.length) > 1" :accept="accept" />'
             + footer,
     })
 }
