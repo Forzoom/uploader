@@ -136,8 +136,9 @@
 
 1. FileImage.file允许为空
 
-#### 0.1.8
+#### 0.2.0
 
 1. 不再支持.min.js
 2. 修复ios下preview导致的闪退问题
 3. 依赖更新
+4. uploader.less从src移动到dist中
