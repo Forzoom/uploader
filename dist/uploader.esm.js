@@ -36,7 +36,7 @@ var footer = '<div v-for="(image, index) in images" ' + ':key="index"' + 'class=
 
 function factory(_Vue) {
   return _Vue.extend({
-    name: 'ROUploader',
+    name: 'Uploader',
     props: {
       /**
        * 允许上传图片个数
@@ -1111,7 +1111,10 @@ function uploadImage(localId) {
       localId: localId,
       isShowProgressTips: 0,
       success: function success(res) {
-        return resolve(res);
+        resolve(res);
+      },
+      fail: function fail(error) {
+        reject(error);
       }
     });
   });
@@ -1145,19 +1148,21 @@ function getLocalImgData(localId) {
 
 
 function uploadWechatImage(localId, transformLocalImageData) {
-  var serverId = null;
   return uploadImage(localId).then(function (_res) {
-    serverId = _res.serverId; // 记录res
+    var serverId = _res.serverId; // 记录res
 
-    return localId;
+    return {
+      localId: localId,
+      serverId: serverId
+    };
   }).then( /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(localId) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(res) {
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.t0 = localId;
-              _context.t1 = serverId;
+              _context.t0 = res.localId;
+              _context.t1 = res.serverId;
               _context.next = 4;
               return getLocalImgData(localId);
 
@@ -1180,7 +1185,9 @@ function uploadWechatImage(localId, transformLocalImageData) {
     return function (_x) {
       return _ref.apply(this, arguments);
     };
-  }());
+  }())["catch"](function (error) {
+    throw new Error(error.errMsg);
+  });
 }
 /**
  * 
@@ -1223,6 +1230,8 @@ function factory$1(_Vue, options) {
             vm.$emit('load');
             return vm.uploadWechatImages(localIds).then(function () {
               vm.$emit('finish');
+            })["catch"](function (errMsg) {
+              vm.$emit('error', errMsg);
             });
           }
         })["catch"](function () {
@@ -1247,13 +1256,13 @@ function factory$1(_Vue, options) {
           });
 
           if (localIds.length > 0) {
-            console.log('target13', vm.uploadWechatImages(localIds));
             return vm.uploadWechatImages(localIds);
           }
+        })["catch"](function (errMsg) {
+          throw new Error(errMsg);
         });
       },
       transformImage: function transformImage(image) {
-        console.log('target12', image);
         return image.base64 ? image.base64 : image.image;
       }
     },

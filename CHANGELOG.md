@@ -1,3 +1,7 @@
+#### 0.2.2
+
+1. feat: 添加error事件
+
 #### v0.0.2
 
 1. export default Uploader 改为 export {Uploader, WechatUploader}

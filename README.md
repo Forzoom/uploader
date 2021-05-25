@@ -21,7 +21,7 @@ Vue.use(Uploader, {
 
 #### WechatUploader
 
-![Example](assets/img1.png)
+![Example](assets/img1.jpg)
 
 大致上存在四种元素，分别是“容器”，“图片元素”，“添加按钮”，“图片容器”
 嵌套结构为
@@ -67,6 +67,7 @@ __根据需要，可以使用Props中的样式内容修改不同元素的样式_
 |choose|sourceType|图片来源|
 |startRequest|无|request开始|
 |endRequest|无|request结束|
+|error|错误信息|发生错误|
 
 ###### load
 
@@ -170,3 +171,4 @@ export interface InputUploaderComponent {..}
 ### Roadmap
 
 1. image之间添加间距
+2. 生成的代码中好像有大量因为async/await而出现的代码

@@ -22,17 +22,19 @@ function noop<T>(_: T) {
  * @return {Promise} {image, serverId}
  */
 function uploadWechatImage(localId: string, transformLocalImageData: boolean) {
-    var serverId = null;
     return uploadImage(localId).then((_res) => {
-        serverId = _res.serverId; // 记录res
-        return localId;
+        var serverId = _res.serverId; // 记录res
+        return { localId, serverId };
     })
-    .then(async (localId) => {
+    .then(async (res) => {
         return {
-            image: localId,
-            serverId: serverId,
+            image: res.localId,
+            serverId: res.serverId,
             base64: await getLocalImgData(localId),
-        }
+        };
+    })
+    .catch((error) => {
+        throw new Error(error.errMsg);
     });
 }
 
@@ -74,6 +76,9 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                             vm.$emit('load');
                             return vm.uploadWechatImages(localIds).then(function() {
                                 vm.$emit('finish');
+                            })
+                            .catch((errMsg) => {
+                                vm.$emit('error', errMsg);
                             });
                         }
                     }).catch(() => {
@@ -90,13 +95,13 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                     .then(function({ image, serverId, base64 }) {
                         vm.add({ image, serverId, base64 });
                         if (localIds.length > 0) {
-                            console.log('target13', vm.uploadWechatImages(localIds));
                             return vm.uploadWechatImages(localIds);
                         }
+                    }).catch((errMsg) => {
+                        throw new Error(errMsg)
                     });
             },
             transformImage: function(image) {
-                console.log('target12', image);
                 return image.base64 ? image.base64 : image.image;
             },
         },

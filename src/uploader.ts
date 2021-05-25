@@ -5,7 +5,7 @@ import {
 import {
     header,
     footer,
-} from './lib/constant'
+} from './lib/constant';
 
 /**
  * @load 当图片上传开始时
@@ -13,7 +13,7 @@ import {
  */
 export default function factory(_Vue: typeof Vue) {
     return _Vue.extend<UploaderData<string>, UploaderMethod<string>, {}, UploaderProp>({
-        name: 'ROUploader',
+        name: 'Uploader',
         props: {
             /**
              * 允许上传图片个数

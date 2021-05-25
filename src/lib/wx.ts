@@ -53,7 +53,10 @@ export function uploadImage(localId: string) {
             localId,
             isShowProgressTips: 0,
             success: function(res) {
-                return resolve(res);
+                resolve(res);
+            },
+            fail: function(error) {
+                reject(error);
             },
         });
     });
