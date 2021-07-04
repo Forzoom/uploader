@@ -59,15 +59,15 @@ __根据需要，可以使用Props中的样式内容修改不同元素的样式_
 
 |名称|参数|说明|
 |---|---|---|
-|load|无|图片上传到微信服务器开始|
-|finish|无|图片上传到微信服务器结束|
-|add| \{ localId, serverId, \} |有图片增加|
-|remove|index (被删除图片位置)|有图片被删除|
-|click|index (被点击图片位置)|当正在显示的图片被点击|
-|choose|sourceType|图片来源|
-|startRequest|无|request开始|
-|endRequest|无|request结束|
-|error|错误信息|发生错误|
+|load              |无       |图片上传到微信服务器开始|
+|finish            |无       |图片上传到微信服务器结束|
+|add               | \{ localId, serverId, \} |有图片增加|
+|remove            |index (被删除图片位置)|有图片被删除|
+|click             |index (被点击图片位置)|当正在显示的图片被点击|
+|choose            | \{ localIds \} |图片来源|
+|startRequest      |无       |request开始|
+|endRequest        |无       |request结束|
+|error             |错误信息  |发生错误|
 
 ###### load
 
@@ -164,11 +164,11 @@ const images = this.$refs.uploader.getImages();
 export interface UploaderComponent {..}
 // 表示<WechatUploader>组件的interface
 export interface WechatUploaderComponent {..}
-// 
+// 表示<InputUploader>组件的interface
 export interface InputUploaderComponent {..}
 ```
 
 ### Roadmap
 
 1. image之间添加间距
-2. 生成的代码中好像有大量因为async/await而出现的代码
+1. 更新rollup版本

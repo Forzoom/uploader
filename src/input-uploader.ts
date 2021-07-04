@@ -30,13 +30,13 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
             /**
              * 要求添加新的图片
              */
-            onClickRequest: function() {
+            onClickRequest() {
                 this.request();
             },
             /**
              * 请求图片上传
              */
-            request: function() {
+            request() {
                 var $input = this.$refs.fileInput;
                 if ($input) {
                     $input.click();
@@ -50,7 +50,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
              *
              * @return {boolean} true表示删除成功，false表示失败
              */
-            remove: function(index) {
+            remove(index) {
                 if (0 <= index && index < this.size) {
                     var removed = this.images.splice(index, 1);
                     for (var i = 0, len = removed.length; i < len; i++) {
@@ -61,7 +61,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 }
                 return false;
             },
-            onChangeInput: function() {
+            onChangeInput() {
                 var $input = this.$refs.fileInput as HTMLInputElement;
                 if ($input) {
                     for (var i = 0, len = $input.files.length; i < len; i++) {
@@ -78,7 +78,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
             /**
              * 获取image
              */
-            transformImage: function(image: FileImage) {
+            transformImage(image: FileImage) {
                 return image.objectUrl;
             },
         },

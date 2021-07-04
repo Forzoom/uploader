@@ -1,3 +1,8 @@
+### 0.2.3
+
+1. feat: 优化代码，删除async/await形式代码
+1. fix: size允许大于9，处理当size > 9时，WechatUploader将报错
+
 #### 0.2.2
 
 1. feat: 添加error事件

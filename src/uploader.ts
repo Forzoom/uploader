@@ -34,7 +34,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             containerClass: {
                 type: [ Object, Array, ],
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -43,7 +43,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             containerStyle: {
                 type: Object,
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -52,7 +52,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             imageClass: {
                 type: [ Object, Array, ],
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -61,7 +61,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             imageStyle: {
                 type: Object,
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -70,7 +70,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             imageWrapClass: {
                 type: [ Object, Array, ],
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -79,7 +79,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             imageWrapStyle: {
                 type: Object,
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -88,7 +88,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             requestClass: {
                 type: [ Object, Array, ],
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -97,7 +97,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             requestStyle: {
                 type: Object,
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -106,7 +106,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             removeClass: {
                 type: [ Object, Array, ],
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -115,7 +115,7 @@ export default function factory(_Vue: typeof Vue) {
              */
             removeStyle: {
                 type: Object,
-                default: function() {
+                default() {
                     return {};
                 },
             },
@@ -127,7 +127,7 @@ export default function factory(_Vue: typeof Vue) {
                 default: false,
             },
         },
-        data: function() {
+        data() {
             return {
                 // 包含所有图片的数组
                 images: [],
@@ -137,9 +137,9 @@ export default function factory(_Vue: typeof Vue) {
             /**
              * 重置所有的images列表，不会触发任何的remove和add事件
              */
-            setImages: function(images) {
-                var tmp = [];
-                for (var i = 0, len = images.length; i < len; i++) {
+            setImages(images) {
+                let tmp = [];
+                for (let i = 0, len = images.length; i < len; i++) {
                     tmp.push(images[i]);
                 }
                 this.images = tmp;
@@ -152,7 +152,7 @@ export default function factory(_Vue: typeof Vue) {
              *
              * @return {boolean} 成功返回true，否则返回false
              */
-            add: function(image) {
+            add(image) {
                 if (this.images.length < this.size) {
                     this.images.push(image);
                     this.$emit('add', image);
@@ -168,7 +168,7 @@ export default function factory(_Vue: typeof Vue) {
              *
              * @return {boolean} true表示删除成功，false表示失败
              */
-            remove: function(index) {
+            remove(index) {
                 if (0 <= index && index < this.size) {
                     this.images.splice(index, 1);
                     this.$emit('remove', index);
@@ -179,8 +179,8 @@ export default function factory(_Vue: typeof Vue) {
             /**
              * 删除所有的图片
              */
-            removeAll: function() {
-                for (var i = 0, len = this.images.length; i < len; i++) {
+            removeAll() {
+                for (let i = 0, len = this.images.length; i < len; i++) {
                     this.remove(i);
                 }
                 return true;
@@ -190,7 +190,7 @@ export default function factory(_Vue: typeof Vue) {
              *
              * @return {Array<string>}
              */
-            getImages: function() {
+            getImages() {
                 return this.images.slice(0);
             },
             /**
@@ -198,37 +198,37 @@ export default function factory(_Vue: typeof Vue) {
              *
              * @param {number} index
              */
-            onClickImage: function(index) {
+            onClickImage(index) {
                 this.$emit('click', index);
             },
             /**
              * 当点击删除按钮时触发
              */
-            onClickRemove: function(index) {
+            onClickRemove(index) {
                 this.remove(index);
             },
             /**
              * 当点击添加按钮时
              */
-            onClickRequest: function() {
+            onClickRequest() {
                 this.$emit('request');
             },
             /**
              * 获得允许上传的容量
              */
-            getSize: function() {
+            getSize() {
                 return this.size;
             },
             /**
              * 获得当前已经上传的图片的数量
              */
-            getCount: function() {
+            getCount() {
                 return this.images.length;
             },
             /**
              * 获取image，在模板中使用
              */
-            transformImage: function(image) {
+            transformImage(image) {
                 return image;
             }
         },

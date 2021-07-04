@@ -25,15 +25,15 @@ export function chooseImage(count: number) {
         wx.chooseImage({
             count,
             sizeType: ['compressed'],
-            success: function(res) {
+            success(res) {
                 return resolve(res);
             },
             // @ts-ignore
-            cancel: function() {
+            cancel() {
                 return reject(new Error('cancel'));
             },
             // @ts-ignore
-            fail: function() {
+            fail() {
                 return reject(new Error('fail'));
             },
         });
@@ -52,10 +52,10 @@ export function uploadImage(localId: string) {
         wx.uploadImage({
             localId,
             isShowProgressTips: 0,
-            success: function(res) {
+            success(res) {
                 resolve(res);
             },
-            fail: function(error) {
+            fail(error) {
                 reject(error);
             },
         });
@@ -65,11 +65,11 @@ export function uploadImage(localId: string) {
 /**
  * @param localId
  *
- * @return {Promise} imageData
+ * @return {Promise<string>} imageData
  */
-export function getLocalImgData(localId: string) {
+export function getLocalImgData(localId: string): Promise<string> {
     if (!isIOS || !window.__wxjs_is_wkwebview) {
-        return localId;
+        return Promise.resolve(localId);
     }
     return new Promise<string>(function(resolve, reject) {
         wx.getLocalImgData({
