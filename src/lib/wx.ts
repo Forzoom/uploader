@@ -63,6 +63,7 @@ export function uploadImage(localId: string) {
 }
 
 /**
+ * 在iOS中可能转base64
  * @param localId
  *
  * @return {Promise<string>} imageData

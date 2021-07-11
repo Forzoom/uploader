@@ -10,10 +10,6 @@ import {
 } from './lib/constant';
 import UploaderFactory from './uploader';
 
-function noop<T>(_: T) {
-    return _;
-}
-
 /**
  * 
  */
@@ -37,7 +33,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
              * 请求图片上传
              */
             request() {
-                var $input = this.$refs.fileInput;
+                const $input = this.$refs.fileInput;
                 if ($input) {
                     $input.click();
                 }
@@ -52,8 +48,8 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
              */
             remove(index) {
                 if (0 <= index && index < this.size) {
-                    var removed = this.images.splice(index, 1);
-                    for (var i = 0, len = removed.length; i < len; i++) {
+                    const removed = this.images.splice(index, 1);
+                    for (let i = 0, len = removed.length; i < len; i++) {
                         URL.revokeObjectURL(removed[i].objectUrl);
                     }
                     this.$emit('remove', index);
@@ -62,13 +58,15 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 return false;
             },
             onChangeInput() {
-                var $input = this.$refs.fileInput as HTMLInputElement;
+                const $input = this.$refs.fileInput as HTMLInputElement;
                 if ($input) {
-                    for (var i = 0, len = $input.files.length; i < len; i++) {
+                    for (let i = 0, len = $input.files.length; i < len; i++) {
+                        // 如果此次循环已满，则不再循环
                         if (this.images.length >= this.size) {
                             return;
                         }
                         this.add({
+                            url: URL.createObjectURL($input.files[i]),
                             file: $input.files[i],
                             objectUrl: URL.createObjectURL($input.files[i]),
                         });
@@ -76,10 +74,10 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 }
             },
             /**
-             * 获取image
+             * 获取用于展示的image
              */
             transformImage(image: FileImage) {
-                return image.objectUrl;
+                return image.objectUrl || image.url;
             },
         },
         template: header

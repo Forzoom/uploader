@@ -17,4 +17,9 @@ function install(vue: typeof Vue, options: UploaderOptions) {
 	vue.component('InputUploader', InputUploaderFactory(vue, options));
 }
 
+export {
+	WechatUploaderFactory,
+	InputUploaderFactory,
+	UploaderFactory,
+};
 export default install;

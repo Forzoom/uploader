@@ -13,29 +13,27 @@ import {
 import UploaderFactory from './uploader';
 
 /**
+ * 上传图片到微信
  *
- *
- * @return {Promise} {image, serverId}
+ * @return {Promise<WechatImage>}
  */
-function uploadWechatImage(localId: string, transformLocalImageData: boolean) {
-    return uploadImage(localId).then((_res) => {
-        let serverId = _res.serverId; // 记录res
-        return { localId, serverId };
-    })
-    .then((res) => {
-        return new Promise((resolve) => {
-            getLocalImgData(localId).then((base64) => {
-                resolve({
-                    image: res.localId,
-                    serverId: res.serverId,
-                    base64,
+function uploadWechatImage(localId: string, transformLocalImageData: boolean): Promise<WechatImage> {
+    return uploadImage(localId)
+        .then((res) => {
+            return new Promise<WechatImage>((resolve) => {
+                getLocalImgData(localId).then((image) => {
+                    resolve({
+                        url: image,
+                        localId: localId,
+                        image,
+                        serverId: res.serverId,
+                    });
                 });
             });
+        })
+        .catch((error) => {
+            throw new Error(error.errMsg);
         });
-    })
-    .catch((error) => {
-        throw new Error(error.errMsg);
-    });
 }
 
 /**
@@ -97,8 +95,8 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                 let vm = this;
                 let localId = localIds.shift();
                 return uploadWechatImage(localId, options.transformWXLocalImageData)
-                    .then(({ image, serverId, base64 }) => {
-                        vm.add({ image, serverId, base64 });
+                    .then((image) => {
+                        vm.add(image);
                         // 没有内容，不再上传
                         if (localIds.length == 0) {
                             return;
@@ -108,14 +106,14 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                         throw new Error(errMsg)
                     });
             },
-            transformImage(image) {
-                return image.base64 ? image.base64 : image.image;
+            transformImage(image: WechatImage) {
+                return image.url;
             },
         },
         mounted() {
-            this.$on('click', function(index) {
+            this.$on('click', function(index: number) {
                 const images = this.images as WechatImage[];
-                previewImage(images[index].image, images.map(image => image.image));
+                previewImage(images[index].url, images.map(image => image.url));
             });
         },
     })

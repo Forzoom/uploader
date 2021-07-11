@@ -172,3 +172,5 @@ export interface InputUploaderComponent {..}
 
 1. image之间添加间距
 1. 更新rollup版本
+1. 目前会忽略chooseImage中的cancel和error信息
+1. transformLocalImageData是否没有用了

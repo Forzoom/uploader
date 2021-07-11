@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('core-js/modules/es.array.slice'), require('core-js/modules/es.array.splice'), require('core-js/modules/es.number.constructor'), require('core-js/modules/es.array.map'), require('core-js/modules/es.object.to-string'), require('core-js/modules/es.promise'), require('core-js/modules/es.array.iterator'), require('core-js/modules/es.string.iterator'), require('core-js/modules/web.dom-collections.iterator'), require('core-js/modules/web.url')) :
-    typeof define === 'function' && define.amd ? define(['core-js/modules/es.array.slice', 'core-js/modules/es.array.splice', 'core-js/modules/es.number.constructor', 'core-js/modules/es.array.map', 'core-js/modules/es.object.to-string', 'core-js/modules/es.promise', 'core-js/modules/es.array.iterator', 'core-js/modules/es.string.iterator', 'core-js/modules/web.dom-collections.iterator', 'core-js/modules/web.url'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Uploader = factory());
-}(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('core-js/modules/es.array.slice'), require('core-js/modules/es.array.splice'), require('core-js/modules/es.number.constructor'), require('core-js/modules/es.array.map'), require('core-js/modules/es.object.to-string'), require('core-js/modules/es.promise'), require('core-js/modules/es.array.iterator'), require('core-js/modules/es.string.iterator'), require('core-js/modules/web.dom-collections.iterator'), require('core-js/modules/web.url')) :
+    typeof define === 'function' && define.amd ? define(['exports', 'core-js/modules/es.array.slice', 'core-js/modules/es.array.splice', 'core-js/modules/es.number.constructor', 'core-js/modules/es.array.map', 'core-js/modules/es.object.to-string', 'core-js/modules/es.promise', 'core-js/modules/es.array.iterator', 'core-js/modules/es.string.iterator', 'core-js/modules/web.dom-collections.iterator', 'core-js/modules/web.url'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Uploader = {}));
+}(this, (function (exports) { 'use strict';
 
     var header = '<div class="ro-uploader-wrap" :class="containerClass" :style="containerStyle">';
     var footer = '<div v-for="(image, index) in images" ' + ':key="index"' + 'class="ro-uploader-image-wrap"' + ':class="imageWrapClass"' + ':style="imageWrapStyle">' + '<div v-if="!lazyload" ' + 'class="ro-uploader-image"' + ':class="imageClass"' + ':style="[{\'background-image\': \'url(\' + transformImage(image) + \')\'}, imageStyle]"' + '@click="onClickImage(index)">' + '</div>' + '<div v-else ' + 'class="ro-uploader-image"' + ':class="imageClass"' + 'v-lazy:background-image="image"' + ':style="[imageStyle]"' + '@click="onClickImage(index)">' + '</div>' + '<div v-if="canModify" class="remove-wrapper" :class="removeClass" :style="removeStyle" @click="onClickRemove(index)"><div class="ro-uploader-remove"></div></div>' + '</div>' + '<slot name="request">' + '<div class="ro-uploader-image-wrap ro-uploader-request" ' + 'v-if="images.length < size && canModify"' + '@click="onClickRequest"' + ':class="requestClass"' + ':style="requestStyle">' + '</div>' + '</slot>' + '</div>';
@@ -318,6 +318,7 @@
       });
     }
     /**
+     * 在iOS中可能转base64
      * @param localId
      *
      * @return {Promise<string>} imageData
@@ -339,26 +340,20 @@
     }
 
     /**
+     * 上传图片到微信
      *
-     *
-     * @return {Promise} {image, serverId}
+     * @return {Promise<WechatImage>}
      */
 
     function uploadWechatImage(localId, transformLocalImageData) {
-      return uploadImage(localId).then(function (_res) {
-        var serverId = _res.serverId; // 记录res
-
-        return {
-          localId: localId,
-          serverId: serverId
-        };
-      }).then(function (res) {
+      return uploadImage(localId).then(function (res) {
         return new Promise(function (resolve) {
-          getLocalImgData(localId).then(function (base64) {
+          getLocalImgData(localId).then(function (image) {
             resolve({
-              image: res.localId,
-              serverId: res.serverId,
-              base64: base64
+              url: image,
+              localId: localId,
+              image: image,
+              serverId: res.serverId
             });
           });
         });
@@ -427,15 +422,8 @@
           uploadWechatImages: function uploadWechatImages(localIds) {
             var vm = this;
             var localId = localIds.shift();
-            return uploadWechatImage(localId, options.transformWXLocalImageData).then(function (_ref) {
-              var image = _ref.image,
-                  serverId = _ref.serverId,
-                  base64 = _ref.base64;
-              vm.add({
-                image: image,
-                serverId: serverId,
-                base64: base64
-              }); // 没有内容，不再上传
+            return uploadWechatImage(localId, options.transformWXLocalImageData).then(function (image) {
+              vm.add(image); // 没有内容，不再上传
 
               if (localIds.length == 0) {
                 return;
@@ -447,14 +435,14 @@
             });
           },
           transformImage: function transformImage(image) {
-            return image.base64 ? image.base64 : image.image;
+            return image.url;
           }
         },
         mounted: function mounted() {
           this.$on('click', function (index) {
             var images = this.images;
-            previewImage(images[index].image, images.map(function (image) {
-              return image.image;
+            previewImage(images[index].url, images.map(function (image) {
+              return image.url;
             }));
           });
         }
@@ -464,7 +452,6 @@
     /**
      * 
      */
-
 
     function factory$2(_Vue, options) {
       var Uploader = factory(_Vue);
@@ -521,11 +508,13 @@
 
             if ($input) {
               for (var i = 0, len = $input.files.length; i < len; i++) {
+                // 如果此次循环已满，则不再循环
                 if (this.images.length >= this.size) {
                   return;
                 }
 
                 this.add({
+                  url: URL.createObjectURL($input.files[i]),
                   file: $input.files[i],
                   objectUrl: URL.createObjectURL($input.files[i])
                 });
@@ -534,10 +523,10 @@
           },
 
           /**
-           * 获取image
+           * 获取用于展示的image
            */
           transformImage: function transformImage(image) {
-            return image.objectUrl;
+            return image.objectUrl || image.url;
           }
         },
         template: header + '<input ref="fileInput" class="ro-uploader-input" type="file" @change="onChangeInput" :multiple="(size - images.length) > 1" :accept="accept" />' + footer
@@ -557,6 +546,11 @@
       vue.component('InputUploader', factory$2(vue));
     }
 
-    return install;
+    exports.InputUploaderFactory = factory$2;
+    exports.UploaderFactory = factory;
+    exports.WechatUploaderFactory = factory$1;
+    exports.default = install;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
