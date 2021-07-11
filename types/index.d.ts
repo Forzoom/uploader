@@ -128,6 +128,6 @@ export type UploaderComponnet = CombinedVueInstance<Vue, UploaderData<string>, U
 export type WechatUploaderComponent<T extends WechatImage = WechatImage> = CombinedVueInstance<Vue, UploaderData<T>, UploaderMethod<T> & WechatUploaderMethod, object, UploaderProp & WechatUploaderProp>;
 export type InputUploaderComponent = CombinedVueInstance<Vue, UploaderData<FileImage>, UploaderMethod<FileImage>, object, UploaderProp & InputUploaderProp>;
 export const UploaderFactory: (Vue: any) => VueConstructor;
-export const WechatUploaderFactory: (Vue: any) => VueConstructor;
+export const WechatUploaderFactory: (Vue: any, options: UploaderOptions) => VueConstructor;
 export const InputUploaderFactory: (Vue: any) => VueConstructor;
 export declare function install(vue: typeof Vue, options: UploaderOptions): void;
