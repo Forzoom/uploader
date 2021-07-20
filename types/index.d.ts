@@ -91,7 +91,7 @@ export interface BasicImage {
 }
 export interface WechatImage extends BasicImage {
     /** @deprecated */
-    image: string | null;
+    image?: string | null;
     localId?: string | null;
     serverId?: string | null;
 }
