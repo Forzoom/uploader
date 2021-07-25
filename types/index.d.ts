@@ -85,25 +85,22 @@ export interface UploaderMethod<ImageType> {
      */
     transformImage(image: ImageType): string;
 }
-export interface BasicImage {
+export interface ImageInfo {
+    /** 保存在OSS上的信息 */
     key?: string;
-    url: string;
-}
-export interface WechatImage extends BasicImage {
-    /** @deprecated */
+    /** 保存在OSS上的信息 */
+    url?: string;
+    mode: 'wechat' | 'input';
+    /** 微信上可以用于显示的图片内容 */
     image?: string | null;
     localId?: string | null;
     serverId?: string | null;
-}
-/**
- * InputUploader中所存储的内容
- */
-export interface FileImage extends BasicImage {
     /** file文件 */
     file?: File;
     /** 由file转换成的objectURL对象 */
     objectUrl?: string;
 }
+
 export interface WechatUploaderProp {
     useWechatPreview: boolean;
 }
@@ -125,8 +122,8 @@ export interface UploaderOptions {
 }
 
 export type UploaderComponnet = CombinedVueInstance<Vue, UploaderData<string>, UploaderMethod<string>, object, UploaderProp>;
-export type WechatUploaderComponent<T extends WechatImage = WechatImage> = CombinedVueInstance<Vue, UploaderData<T>, UploaderMethod<T> & WechatUploaderMethod, object, UploaderProp & WechatUploaderProp>;
-export type InputUploaderComponent = CombinedVueInstance<Vue, UploaderData<FileImage>, UploaderMethod<FileImage>, object, UploaderProp & InputUploaderProp>;
+export type WechatUploaderComponent<T extends ImageInfo = ImageInfo> = CombinedVueInstance<Vue, UploaderData<T>, UploaderMethod<T> & WechatUploaderMethod, object, UploaderProp & WechatUploaderProp>;
+export type InputUploaderComponent<T extends ImageInfo = ImageInfo> = CombinedVueInstance<Vue, UploaderData<T>, UploaderMethod<T>, object, UploaderProp & InputUploaderProp>;
 export const UploaderFactory: (Vue: any) => VueConstructor;
 export const WechatUploaderFactory: (Vue: any, options: UploaderOptions) => VueConstructor;
 export const InputUploaderFactory: (Vue: any) => VueConstructor;

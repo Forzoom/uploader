@@ -1,6 +1,6 @@
 ### 0.3.0
 
-1. feat: WechatImage和InputImage均补充BasicImage，基本向后兼容，但WechatImage中的image不应该再使用
+1. feat: WechatImage和InputImage合并为ImageInfo，基本向后兼容
 1. feat: 补充导出 UploaderFactory / InputUploaderFactory / WechatUploaderFactory
 1. fix: 删除错误的导出类型 Uploader / WechatUploader / InputUploader
 

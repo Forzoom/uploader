@@ -350,8 +350,6 @@ function getLocalImgData(localId) {
 
 /**
  * 上传图片到微信
- *
- * @return {Promise<WechatImage>}
  */
 
 function uploadWechatImage(localId, transformLocalImageData) {
@@ -359,10 +357,10 @@ function uploadWechatImage(localId, transformLocalImageData) {
     return new Promise(function (resolve) {
       getLocalImgData(localId).then(function (image) {
         resolve({
-          url: image,
           localId: localId,
+          serverId: res.serverId,
           image: image,
-          serverId: res.serverId
+          mode: 'wechat'
         });
       });
     });

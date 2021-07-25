@@ -7,26 +7,24 @@ import {
 } from './lib/wx';
 import {
     UploaderData,
-    WechatImage,
+    ImageInfo,
     UploaderOptions,
 } from '../types/index';
 import UploaderFactory from './uploader';
 
 /**
  * 上传图片到微信
- *
- * @return {Promise<WechatImage>}
  */
-function uploadWechatImage(localId: string, transformLocalImageData: boolean): Promise<WechatImage> {
+function uploadWechatImage(localId: string, transformLocalImageData: boolean): Promise<ImageInfo> {
     return uploadImage(localId)
         .then((res) => {
-            return new Promise<WechatImage>((resolve) => {
+            return new Promise<ImageInfo>((resolve) => {
                 getLocalImgData(localId).then((image) => {
                     resolve({
-                        url: image,
-                        localId: localId,
-                        image,
+                        localId,
                         serverId: res.serverId,
+                        image,
+                        mode: 'wechat',
                     });
                 });
             });
@@ -41,7 +39,7 @@ function uploadWechatImage(localId: string, transformLocalImageData: boolean): P
  */
 export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
     const Uploader = UploaderFactory(_Vue);
-    return Uploader.extend<UploaderData<WechatImage>, {}, {}, {}>({
+    return Uploader.extend<UploaderData<ImageInfo>, {}, {}, {}>({
         name: 'WechatUploader',
         props: {
             /**
@@ -106,13 +104,13 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                         throw new Error(errMsg)
                     });
             },
-            transformImage(image: WechatImage) {
+            transformImage(image: ImageInfo) {
                 return image.url;
             },
         },
         mounted() {
             this.$on('click', function(index: number) {
-                const images = this.images as WechatImage[];
+                const images = this.images as ImageInfo[];
                 previewImage(images[index].url, images.map(image => image.url));
             });
         },

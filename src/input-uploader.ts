@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import {
+    ImageInfo,
     UploaderData,
     UploaderOptions,
-    FileImage,
 } from '../types/index';
 import {
     header,
@@ -15,7 +15,7 @@ import UploaderFactory from './uploader';
  */
 export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
     const Uploader = UploaderFactory(_Vue);
-    return Uploader.extend<UploaderData<FileImage>, {}, {}, {}>({
+    return Uploader.extend<UploaderData<ImageInfo>, {}, {}, {}>({
         name: 'InputUploader',
         props: {
             accept: {
@@ -76,7 +76,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
             /**
              * 获取用于展示的image
              */
-            transformImage(image: FileImage) {
+            transformImage(image: ImageInfo) {
                 return image.objectUrl || image.url;
             },
         },
