@@ -433,7 +433,7 @@
             });
           },
           transformImage: function transformImage(image) {
-            return image.url;
+            return image.image || image.url;
           }
         },
         mounted: function mounted() {

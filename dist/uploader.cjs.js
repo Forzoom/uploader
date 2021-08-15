@@ -442,7 +442,7 @@ function factory$1(_Vue, options) {
         });
       },
       transformImage: function transformImage(image) {
-        return image.url;
+        return image.image || image.url;
       }
     },
     mounted: function mounted() {

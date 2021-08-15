@@ -105,7 +105,7 @@ export default function factory(_Vue: typeof Vue, options: UploaderOptions) {
                     });
             },
             transformImage(image: ImageInfo) {
-                return image.url;
+                return image.image || image.url;
             },
         },
         mounted() {

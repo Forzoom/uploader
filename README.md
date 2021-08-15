@@ -168,6 +168,20 @@ export interface WechatUploaderComponent {..}
 export interface InputUploaderComponent {..}
 ```
 
+#### ImageInfo
+
+图片信息
+
+1. key: 文件在后端的标识符
+1. url: 表示图片存储在网络上的地址。
+1. image: 表示可以用来展示的图片内容，一般是 WechatUploader。
+1. mode: 'input' | 'wechat'
+1. localId: 微信jssdk中的localId
+1. serverId: 微信jssdk中的serverId
+1. file: 图片文件
+1. objectUrl: 有file转换而成的objectUrl，单独使用一个变量是因为需要调用revoke方法进行资源释放。
+
+
 ### Roadmap
 
 1. image之间添加间距
